@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sharp Code</title>
+  <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">S</div>
+      <span>SHARP <b>CODE</b></span>
+    </div>
+
+    <div class="toolbar">
+      <button id="newFile">New</button>
+      <button id="openFile">Open</button>
+      <button id="saveFile" class="primary">Save</button>
+    </div>
+
+    <div class="window-label">DESKTOP IDE · 0.1.0</div>
+  </header>
+
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="side-heading">WORKSPACE</div>
+      <div class="project-name">
+        <span class="green-dot"></span>
+        SHARP PROJECT
+      </div>
+
+      <div class="side-heading tools-heading">TOOLS</div>
+      <div class="tool active">⌘ &nbsp; Code Editor</div>
+      <div class="tool disabled">✦ &nbsp; Sharp AI <small>SOON</small></div>
+      <div class="tool disabled">▤ &nbsp; Terminal <small>SOON</small></div>
+      <div class="tool disabled">◈ &nbsp; Game Studio <small>SOON</small></div>
+      <div class="tool disabled">⑂ &nbsp; Source Control <small>SOON</small></div>
+
+      <div class="sidebar-bottom">
+        <div class="green-dot"></div>
+        Sharp Code 0.1.0
+      </div>
+    </aside>
+
+    <section class="editor-area">
+      <div class="tabbar">
+        <div class="tab">
+          <span class="tab-dot"></span>
+          <span id="fileName">untitled.js</span>
+          <span id="modified"></span>
+        </div>
+      </div>
+
+      <div class="editor-heading">
+        <div>
+          <span class="breadcrumb">Workspace</span>
+          <span class="breadcrumb-separator">/</span>
+          <span id="breadcrumbFile">untitled.js</span>
+        </div>
+        <span class="language-label" id="languageLabel">JAVASCRIPT</span>
+      </div>
+
+      <div id="editor"></div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <div>
+      <span class="green-dot"></span>
+      <span id="status">Ready</span>
+    </div>
+    <div class="status-right">
+      <span id="cursorPosition">Ln 1, Col 1</span>
+      <span id="encoding">UTF-8</span>
+      <span>SHARP CODE</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+  <script src="src/js/app.js"></script>
+</body>
+</html>
