@@ -1,55 +1,57 @@
 
-const SharpSettings = (() => {
+window.SharpSettings = (() => {
+  let editor;
+
   const defaults = {
     fontSize: 14,
-    minimap: true,
     wordWrap: "off",
-    tabSize: 2,
-    theme: "sharp-emerald"
+    minimap: true,
+    tabSize: 2
   };
 
   let settings = { ...defaults };
 
+  function initialize(instance) {
+    editor = instance;
+    apply();
+  }
+
   function update(key, value) {
-    if (!(key in defaults)) {
-      throw new Error("Unknown setting");
+    if (!(key in defaults)) return;
+
+    if (key === "fontSize") {
+      value = Math.min(30, Math.max(10, Number(value)));
     }
 
     settings[key] = value;
+    apply();
+  }
 
-    if (window.editor) {
-      window.editor.updateOptions({
-        fontSize: settings.fontSize,
-        minimap: { enabled: settings.minimap },
-        wordWrap: settings.wordWrap,
-        tabSize: settings.tabSize
-      });
+  function apply() {
+    if (!editor) return;
 
-      window.editor.layout();
-    }
+    editor.updateOptions({
+      fontSize: settings.fontSize,
+      wordWrap: settings.wordWrap,
+      minimap: { enabled: settings.minimap },
+      tabSize: settings.tabSize
+    });
+  }
+
+  function reset() {
+    settings = { ...defaults };
+    apply();
   }
 
   function get(key) {
     return settings[key];
   }
 
-  function reset() {
-    settings = { ...defaults };
-    updateEditor();
-  }
-
-  function updateEditor() {
-    if (!window.editor) return;
-
-    window.editor.updateOptions({
-      fontSize: settings.fontSize,
-      minimap: { enabled: settings.minimap },
-      wordWrap: settings.wordWrap,
-      tabSize: settings.tabSize
-    });
-  }
-
-  return { update, get, reset, updateEditor };
+  return {
+    initialize,
+    update,
+    apply,
+    reset,
+    get
+  };
 })();
-
-window.SharpSettings = SharpSettings;
