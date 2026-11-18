@@ -1,43 +1,31 @@
 
-const ProjectManager = (() => {
-  let currentProject = null;
+window.ProjectManager = (() => {
+  let project = null;
 
-  function createProject(name, location) {
-    if (!name.trim()) {
-      throw new Error("Project name is required");
-    }
-
-    currentProject = {
-      name,
-      location,
-      createdAt: new Date().toISOString(),
-      version: "1.0.0",
-      files: []
+  function setProject(data) {
+    project = {
+      name: data.name,
+      path: data.path,
+      openedAt: new Date().toISOString()
     };
-
-    return currentProject;
   }
 
   function getProject() {
-    return currentProject;
+    return project;
   }
 
   function closeProject() {
-    currentProject = null;
+    project = null;
   }
 
-  function addFile(file) {
-    if (!currentProject) return;
-
-    currentProject.files.push(file);
+  function isOpen() {
+    return project !== null;
   }
 
   return {
-    createProject,
+    setProject,
     getProject,
     closeProject,
-    addFile
+    isOpen
   };
 })();
-
-window.ProjectManager = ProjectManager;
