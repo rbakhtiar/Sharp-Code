@@ -1,0 +1,38 @@
+.console-panel {
+  height: 160px;
+  min-height: 100px;
+  background: #081710;
+  border-top: 1px solid #1b3829;
+}
+
+.console-header {
+  height: 35px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #7dbb98;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+#consoleOutput {
+  height: 120px;
+  overflow-y: auto;
+  padding: 5px 12px;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+}
+
+.console-line {
+  padding: 3px 0;
+  color: #a7c8b2;
+}
+
+.console-line.error {
+  color: #ff8585;
+}
+
+.console-line.success {
+  color: #5cdda0;
+}
