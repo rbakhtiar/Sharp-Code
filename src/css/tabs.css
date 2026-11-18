@@ -1,0 +1,58 @@
+.tabbar {
+  display: flex;
+  overflow-x: auto;
+}
+
+.editor-tab {
+  border-radius: 0;
+  border-top: 2px solid transparent;
+  white-space: nowrap;
+  height: 42px;
+}
+
+.editor-tab.selected {
+  border-top-color: var(--green);
+  background: #10271c;
+}
+
+.command-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #0009;
+  display: flex;
+  justify-content: center;
+  padding-top: 15vh;
+}
+
+.command-overlay[hidden] {
+  display: none;
+}
+
+.command-box {
+  width: min(600px, 90vw);
+  height: fit-content;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: #10271c;
+  border: 1px solid #286447;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 20px 80px #0009;
+}
+
+.command-box input {
+  width: 100%;
+  padding: 13px;
+  background: #071711;
+  border: 1px solid #28553e;
+  border-radius: 7px;
+  color: white;
+  outline: none;
+}
+
+.command-item {
+  width: 100%;
+  text-align: left;
+  margin-top: 6px;
+}
