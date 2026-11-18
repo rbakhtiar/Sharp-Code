@@ -1,0 +1,16 @@
+
+{
+  "name": "sharp-code",
+  "version": "0.1.0",
+  "description": "Sharp Code Desktop IDE",
+  "main": "main.js",
+  "author": "Rahim Bakhtiar",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^35.2.1"
+  }
+}
