@@ -1,38 +1,49 @@
 
-const SharpCommands = (() => {
+window.SharpCommands = (() => {
   const commands = [
     {
       name: "New File",
       shortcut: "Ctrl + N",
-      action: () => document.getElementById("newFile").click()
+      action: () => window.SharpApp.newFile()
     },
     {
       name: "Open File",
       shortcut: "Ctrl + O",
-      action: () => document.getElementById("openFile").click()
+      action: () => window.SharpApp.openFile()
+    },
+    {
+      name: "Open Project",
+      shortcut: "",
+      action: () => window.SharpApp.openProject()
     },
     {
       name: "Save File",
       shortcut: "Ctrl + S",
-      action: () => document.getElementById("saveFile").click()
+      action: () => window.SharpApp.saveFile()
     },
     {
-      name: "Show Editor",
+      name: "Settings",
+      shortcut: "Ctrl + ,",
+      action: () => {
+        document.getElementById("settingsModal").hidden = false;
+      }
+    },
+    {
+      name: "Clear Output",
       shortcut: "",
-      action: () => window.editor?.focus()
+      action: () => window.SharpConsole.clear()
     }
   ];
 
   function open() {
-    const palette = document.getElementById("commandPalette");
+    const overlay = document.getElementById("commandPalette");
 
-    palette.hidden = false;
+    overlay.hidden = false;
 
     const input = document.getElementById("commandSearch");
     input.value = "";
-    input.focus();
-
     render("");
+    input.focus();
   }
 
   function close() {
@@ -40,26 +51,26 @@ const SharpCommands = (() => {
   }
 
   function render(query) {
-    const results = document.getElementById("commandResults");
-
-    results.replaceChildren();
+    const container = document.getElementById("commandResults");
+    container.replaceChildren();
 
     commands
       .filter(command =>
         command.name.toLowerCase().includes(query.toLowerCase())
       )
       .forEach(command => {
-        const item = document.createElement("button");
-        item.className = "command-item";
-        item.textContent =
-          command.name + "  ·  " + command.shortcut;
+        const button = document.createElement("button");
 
-        item.addEventListener("click", () => {
+        button.className = "command-item";
+        button.textContent =
+          command.name + "    " + command.shortcut;
+
+        button.addEventListener("click", () => {
           close();
           command.action();
         });
 
-        results.appendChild(item);
+        container.appendChild(button);
       });
   }
 
@@ -73,15 +84,16 @@ const SharpCommands = (() => {
       open();
     }
 
-    if (event.key === "Escape") close();
+    if (
+      event.key === "Escape" &&
+      !document.getElementById("commandPalette").hidden
+    ) {
+      close();
+    }
   });
 
   document.getElementById("commandSearch")
-    ?.addEventListener("input", event => {
-      render(event.target.value);
-    });
+    .addEventListener("input", event => render(event.target.value));
 
   return { open, close, render };
 })();
-
-window.SharpCommands = SharpCommands;
