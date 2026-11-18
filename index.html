@@ -4,82 +4,143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071711">
   <title>Sharp Code</title>
   <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">S</div>
-      <span>SHARP <b>CODE</b></span>
-    </div>
-
-    <div class="toolbar">
-      <button id="newFile">New</button>
-      <button id="openFile">Open</button>
-      <button id="saveFile" class="primary">Save</button>
-    </div>
-
-    <div class="window-label">DESKTOP IDE · 0.1.0</div>
-  </header>
-
-  <main class="workspace">
-    <aside class="sidebar">
-      <div class="side-heading">WORKSPACE</div>
-      <div class="project-name">
-        <span class="green-dot"></span>
-        SHARP PROJECT
-      </div>
-
-      <div class="side-heading tools-heading">TOOLS</div>
-      <div class="tool active">⌘ &nbsp; Code Editor</div>
-      <div class="tool disabled">✦ &nbsp; Sharp AI <small>SOON</small></div>
-      <div class="tool disabled">▤ &nbsp; Terminal <small>SOON</small></div>
-      <div class="tool disabled">◈ &nbsp; Game Studio <small>SOON</small></div>
-      <div class="tool disabled">⑂ &nbsp; Source Control <small>SOON</small></div>
-
-      <div class="sidebar-bottom">
-        <div class="green-dot"></div>
-        Sharp Code 0.1.0
-      </div>
-    </aside>
-
-    <section class="editor-area">
-      <div class="tabbar">
-        <div class="tab">
-          <span class="tab-dot"></span>
-          <span id="fileName">untitled.js</span>
-          <span id="modified"></span>
-        </div>
-      </div>
-
-      <div class="editor-heading">
-        <div>
-          <span class="breadcrumb">Workspace</span>
-          <span class="breadcrumb-separator">/</span>
-          <span id="breadcrumbFile">untitled.js</span>
-        </div>
-        <span class="language-label" id="languageLabel">JAVASCRIPT</span>
-      </div>
-
-      <div id="editor"></div>
-    </section>
-  </main>
-
-  <footer class="statusbar">
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">S</div>
     <div>
-      <span class="green-dot"></span>
-      <span id="status">Ready</span>
+      <div class="brand-name">SHARP <b>CODE</b></div>
+      <div class="brand-subtitle">DEVELOPMENT ENVIRONMENT</div>
     </div>
-    <div class="status-right">
-      <span id="cursorPosition">Ln 1, Col 1</span>
-      <span id="encoding">UTF-8</span>
-      <span>SHARP CODE</span>
-    </div>
-  </footer>
+  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
-  <script src="src/js/app.js"></script>
+  <div class="toolbar">
+    <button id="newFile">New</button>
+    <button id="openProject">Open Folder</button>
+    <button id="openFile">Open File</button>
+    <button id="saveFile" class="primary">Save</button>
+  </div>
+
+  <button id="commandButton" class="command-button">
+    ⌕ Command Palette
+  </button>
+</header>
+
+<main class="workspace">
+
+  <aside class="sidebar">
+    <div class="side-heading">EXPLORER</div>
+
+    <div id="projectTitle" class="project-title">
+      NO PROJECT OPEN
+    </div>
+
+    <div id="fileTree" class="file-tree">
+      <div class="empty-tree">Open a folder to get started.</div>
+    </div>
+
+    <div class="side-heading tools-heading">DEVELOPMENT</div>
+
+    <button class="tool active" data-panel="editor">⌘ Code Editor</button>
+    <button class="tool" data-panel="ai">✦ Sharp AI</button>
+    <button class="tool" data-panel="terminal">▤ Terminal</button>
+    <button class="tool" data-panel="studio">◈ Game Studio</button>
+
+    <div class="sidebar-bottom">
+      <span class="green-dot"></span>
+      Sharp Code 0.2.0
+    </div>
+  </aside>
+
+  <section class="editor-area">
+
+    <div class="tabbar" id="tabs"></div>
+
+    <div class="editor-heading">
+      <div>
+        <span class="breadcrumb" id="breadcrumb">Workspace</span>
+      </div>
+      <span id="languageLabel">PLAINTEXT</span>
+    </div>
+
+    <div id="editor"></div>
+
+    <section class="console-panel">
+      <div class="console-header">
+        <span>OUTPUT</span>
+        <button id="clearConsole">Clear</button>
+      </div>
+      <div id="consoleOutput"></div>
+    </section>
+
+  </section>
+
+</main>
+
+<footer class="statusbar">
+  <div>
+    <span class="green-dot"></span>
+    <span id="status">Initializing...</span>
+  </div>
+
+  <div class="status-right">
+    <span id="cursorPosition">Ln 1, Col 1</span>
+    <span id="encoding">UTF-8</span>
+    <span id="languageStatus">Plain Text</span>
+    <span>SHARP CODE</span>
+  </div>
+</footer>
+
+<div id="commandPalette" class="command-overlay" hidden>
+  <div class="command-box">
+    <input id="commandSearch" placeholder="Search commands...">
+    <div id="commandResults"></div>
+  </div>
+</div>
+
+<div id="settingsModal" class="modal-overlay" hidden>
+  <div class="modal">
+    <h2>Sharp Code Settings</h2>
+
+    <label>Editor font size</label>
+    <input id="fontSize" type="number" min="10" max="30" value="14">
+
+    <label>Editor theme</label>
+    <select id="themeSelect">
+      <option value="emerald">Emerald</option>
+      <option value="forest">Forest</option>
+      <option value="midnight">Midnight</option>
+      <option value="obsidian">Obsidian</option>
+    </select>
+
+    <label>Word wrap</label>
+    <select id="wordWrap">
+      <option value="off">Off</option>
+      <option value="on">On</option>
+    </select>
+
+    <div class="modal-actions">
+      <button id="resetSettings">Reset</button>
+      <button id="closeSettings" class="primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+
+<script src="src/editor/themes.js"></script>
+<script src="src/projects/project-manager.js"></script>
+<script src="src/js/console.js"></script>
+<script src="src/js/settings.js"></script>
+<script src="src/js/tabs.js"></script>
+<script src="src/js/explorer.js"></script>
+<script src="src/js/commands.js"></script>
+<script src="src/js/app.js"></script>
+
 </body>
 </html>
