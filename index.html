@@ -2,145 +2,5030 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#071711">
-  <title>Sharp Code</title>
-  <link rel="stylesheet" href="src/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071811">
+
+<title>Sharp Code — Development Workspace</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Alegreya+Sans+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   SHARP CODE
+   Main interface stylesheet
+   Theme: Deep Emerald
+   ========================================================= */
+
+:root {
+    --background: #071811;
+    --background-deep: #04100b;
+    --surface: #0b2017;
+    --surface-raised: #10291e;
+    --surface-hover: #153528;
+    --surface-active: #1a3d2d;
+
+    --border: #1b3b2b;
+    --border-soft: rgba(119, 174, 139, 0.12);
+
+    --text: #e7f0e8;
+    --text-secondary: #a2b8a7;
+    --text-muted: #6f8b77;
+
+    --emerald: #42bd83;
+    --emerald-light: #75d6a5;
+    --emerald-dark: #207b51;
+
+    --gold: #c9ae78;
+    --red: #e47777;
+    --yellow: #d9bd72;
+    --blue: #7eb6d4;
+
+    --sidebar-width: 265px;
+    --activity-width: 50px;
+    --right-width: 305px;
+    --bottom-height: 215px;
+
+    --ui-font: "Alegreya", Georgia, serif;
+    --code-font: "Alegreya Sans Mono", monospace;
+
+    --radius-small: 5px;
+    --radius-medium: 9px;
+    --radius-large: 13px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    font-family: var(--ui-font);
+    font-size: 15px;
+    user-select: none;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 1px solid var(--emerald);
+    outline-offset: 2px;
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+::selection {
+    background: rgba(66, 189, 131, 0.32);
+    color: white;
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #254633;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #37664a;
+}
+
+/* =========================================================
+   APPLICATION FRAME
+   ========================================================= */
+
+.app-shell {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-rows: 47px minmax(0, 1fr) 25px;
+    background: var(--background);
+    overflow: hidden;
+}
+
+.titlebar {
+    height: 47px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 13px;
+    background: #081a12;
+    border-bottom: 1px solid var(--border);
+    -webkit-app-region: drag;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    min-width: 115px;
+    gap: 8px;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #e6f2e9;
+    white-space: nowrap;
+}
+
+.brand-name {
+    color: var(--emerald-light);
+}
+
+.brand-description {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 0;
+    margin-left: 3px;
+}
+
+.top-menu {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 100%;
+    -webkit-app-region: no-drag;
+}
+
+.menu-button {
+    border: 0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.menu-button:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+.titlebar-spacer {
+    flex: 1;
+}
+
+.project-indicator {
+    color: var(--text-muted);
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 240px;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    -webkit-app-region: no-drag;
+}
+
+.top-action {
+    height: 30px;
+    min-width: 31px;
+    padding: 0 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.top-action:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+.top-action.primary {
+    color: #06170e;
+    background: var(--emerald);
+    font-weight: 700;
+}
+
+.top-action.primary:hover {
+    background: var(--emerald-light);
+}
+
+/* =========================================================
+   WORKSPACE GRID
+   ========================================================= */
+
+.workspace {
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+/* =========================================================
+   ACTIVITY BAR
+   ========================================================= */
+
+.activity-bar {
+    width: var(--activity-width);
+    min-width: var(--activity-width);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #07170f;
+    border-right: 1px solid var(--border);
+    padding: 9px 0;
+}
+
+.activity-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+}
+
+.activity-button {
+    width: 39px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--text-muted);
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 19px;
+    position: relative;
+    transition: 0.15s ease;
+}
+
+.activity-button:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+.activity-button.active {
+    color: var(--emerald-light);
+    background: rgba(66, 189, 131, 0.10);
+}
+
+.activity-button.active::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 7px;
+    height: 25px;
+    width: 2px;
+    border-radius: 4px;
+    background: var(--emerald);
+}
+
+.activity-button .activity-tooltip {
+    display: none;
+    position: absolute;
+    left: 47px;
+    z-index: 100;
+    padding: 6px 10px;
+    background: #152d20;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.activity-button:hover .activity-tooltip {
+    display: block;
+}
+
+/* =========================================================
+   LEFT SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+    transition: width 0.18s ease;
+}
+
+.sidebar.hidden {
+    display: none;
+}
+
+.sidebar-header {
+    min-height: 43px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.sidebar-title {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.sidebar-header-actions {
+    display: flex;
+    gap: 3px;
+}
+
+.small-icon-button {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    width: 27px;
+    height: 27px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.small-icon-button:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+.project-heading {
+    padding: 13px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.project-heading-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-name {
+    font-weight: 700;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.project-path {
+    color: var(--text-muted);
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.project-tools {
+    display: flex;
+    gap: 4px;
+}
+
+.project-tool {
+    border: 1px solid var(--border-soft);
+    color: var(--text-secondary);
+    background: transparent;
+    border-radius: 5px;
+    padding: 4px 7px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.project-tool:hover {
+    color: var(--emerald-light);
+    border-color: var(--emerald-dark);
+    background: rgba(66, 189, 131, 0.06);
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+}
+
+.panel-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.panel-view[hidden] {
+    display: none !important;
+}
+
+.sidebar-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 12px 6px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tree-root {
+    padding: 2px 0 12px;
+}
+
+.tree-node {
+    width: 100%;
+}
+
+.tree-row {
+    min-height: 28px;
+    padding: 3px 9px 3px 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.tree-row:hover {
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--text);
+}
+
+.tree-row.selected {
+    background: rgba(66, 189, 131, 0.12);
+    color: var(--emerald-light);
+}
+
+.tree-arrow {
+    width: 12px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    transition: transform 0.15s ease;
+}
+
+.tree-arrow.expanded {
+    transform: rotate(90deg);
+}
+
+.tree-symbol {
+    width: 16px;
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--emerald);
+    font-size: 13px;
+}
+
+.tree-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tree-children {
+    padding-left: 13px;
+}
+
+.tree-empty {
+    padding: 15px 13px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.sidebar-footer {
+    padding: 9px 12px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* =========================================================
+   SEARCH PANEL
+   ========================================================= */
+
+.search-area {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.field-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.text-input,
+.select-input {
+    width: 100%;
+    padding: 8px 10px;
+    outline: none;
+    color: var(--text);
+    background: #081910;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-family: var(--ui-font);
+    font-size: 14px;
+}
+
+.text-input:focus,
+.select-input:focus {
+    border-color: var(--emerald-dark);
+}
+
+.search-options {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.search-result {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-soft);
+    cursor: pointer;
+}
+
+.search-result:hover {
+    background: var(--surface-hover);
+}
+
+.search-result-path {
+    color: var(--emerald-light);
+    font-size: 12px;
+}
+
+.search-result-line {
+    margin-top: 3px;
+    color: var(--text-secondary);
+    font-family: var(--code-font);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   EDITOR AREA
+   ========================================================= */
+
+.editor-area {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+    overflow: hidden;
+}
+
+.editor-tabs {
+    height: 39px;
+    min-height: 39px;
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #091a12;
+    border-bottom: 1px solid var(--border);
+}
+
+.editor-tabs::-webkit-scrollbar {
+    height: 3px;
+}
+
+.editor-tab {
+    height: 39px;
+    min-width: 110px;
+    max-width: 190px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 11px;
+    color: var(--text-muted);
+    background: transparent;
+    border-right: 1px solid var(--border-soft);
+    border-top: 1px solid transparent;
+    cursor: pointer;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.editor-tab:hover {
+    color: var(--text-secondary);
+    background: rgba(255,255,255,0.02);
+}
+
+.editor-tab.active {
+    color: var(--text);
+    background: var(--background);
+    border-top: 2px solid var(--emerald);
+}
+
+.tab-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tab-dirty {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+}
+
+.tab-close {
+    width: 19px;
+    height: 19px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.tab-close:hover {
+    color: white;
+    background: var(--surface-hover);
+}
+
+.editor-toolbar {
+    height: 32px;
+    min-height: 32px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-soft);
+    background: #091a12;
+}
+
+.breadcrumbs {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text-muted);
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.breadcrumb-current {
+    color: var(--text-secondary);
+}
+
+.editor-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.editor-action {
+    padding: 3px 7px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.editor-action:hover {
+    color: var(--emerald-light);
+    background: var(--surface-hover);
+}
+
+.editor-stage {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: #071811;
+}
+
+#monacoMount {
+    position: absolute;
+    inset: 0;
+    display: none;
+}
+
+#codeFallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: 0;
+    outline: 0;
+    padding: 18px 22px;
+    background: #071811;
+    color: var(--text);
+    font-family: var(--code-font);
+    font-size: 14px;
+    line-height: 1.7;
+    tab-size: 4;
+    white-space: pre;
+    overflow: auto;
+}
+
+.welcome-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            rgba(33, 109, 70, 0.11),
+            transparent 55%
+        );
+}
+
+.welcome-screen[hidden] {
+    display: none;
+}
+
+.welcome-heading {
+    font-size: clamp(30px, 4vw, 47px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: #e8f1e9;
+}
+
+.welcome-heading span {
+    color: var(--emerald-light);
+}
+
+.welcome-description {
+    max-width: 420px;
+    margin-top: 7px;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.welcome-actions {
+    margin-top: 27px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.welcome-button {
+    min-width: 135px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.15s ease;
+}
+
+.welcome-button:hover {
+    color: var(--emerald-light);
+    border-color: var(--emerald-dark);
+    background: var(--surface-raised);
+}
+
+.welcome-button.primary {
+    color: #06170e;
+    background: var(--emerald);
+    border-color: var(--emerald);
+    font-weight: 700;
+}
+
+.welcome-button.primary:hover {
+    background: var(--emerald-light);
+}
+
+.welcome-shortcuts {
+    margin-top: 27px;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 8px 22px;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: left;
+}
+
+.shortcut-key {
+    display: inline-block;
+    padding: 2px 6px;
+    border: 1px solid #284936;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    background: #0c2117;
+    font-family: var(--code-font);
+    font-size: 11px;
+}
+
+/* =========================================================
+   RIGHT PANEL
+   ========================================================= */
+
+.right-panel {
+    width: var(--right-width);
+    min-width: var(--right-width);
+    display: none;
+    flex-direction: column;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+}
+
+.right-panel.visible {
+    display: flex;
+}
+
+.right-panel-header {
+    height: 43px;
+    min-height: 43px;
+    padding: 0 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.right-panel-content {
+    flex: 1;
+    overflow: auto;
+    padding: 14px;
+}
+
+.assistant-intro {
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-raised);
+}
+
+.assistant-intro-title {
+    font-size: 18px;
+    color: var(--emerald-light);
+    font-weight: 700;
+}
+
+.assistant-intro-text {
+    margin-top: 5px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.assistant-suggestion {
+    margin-top: 9px;
+    padding: 10px;
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.assistant-suggestion:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.assistant-compose {
+    margin-top: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.assistant-compose textarea {
+    min-height: 95px;
+    max-height: 160px;
+    resize: vertical;
+    padding: 10px;
+    background: #081910;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    outline: 0;
+    font-family: var(--ui-font);
+    font-size: 14px;
+}
+
+.assistant-compose textarea:focus {
+    border-color: var(--emerald-dark);
+}
+
+.assistant-note {
+    margin-top: 11px;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   BOTTOM PANEL
+   ========================================================= */
+
+.bottom-panel {
+    height: var(--bottom-height);
+    min-height: var(--bottom-height);
+    display: none;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    background: #081a12;
+}
+
+.bottom-panel.visible {
+    display: flex;
+}
+
+.bottom-header {
+    height: 37px;
+    min-height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 11px;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.bottom-tabs {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+}
+
+.bottom-tab {
+    height: 100%;
+    padding: 0 2px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.bottom-tab:hover {
+    color: var(--text-secondary);
+}
+
+.bottom-tab.active {
+    color: var(--emerald-light);
+    border-bottom-color: var(--emerald);
+}
+
+.bottom-content {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 10px 13px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.bottom-view {
+    display: none;
+}
+
+.bottom-view.active {
+    display: block;
+}
+
+.output-line {
+    padding: 2px 0;
+    color: var(--text-muted);
+    font-family: var(--code-font);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+.output-line.error {
+    color: var(--red);
+}
+
+.output-line.success {
+    color: var(--emerald-light);
+}
+
+.terminal-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--emerald-light);
+    font-family: var(--code-font);
+    font-size: 12px;
+}
+
+.terminal-prompt {
+    color: var(--emerald);
+}
+
+.terminal-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--text);
+    font-family: var(--code-font);
+    font-size: 12px;
+}
+
+.terminal-message {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.git-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 5px;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.git-entry-name {
+    color: var(--text-secondary);
+    font-family: var(--code-font);
+    font-size: 12px;
+}
+
+.git-entry-status {
+    color: var(--yellow);
+    font-size: 12px;
+}
+
+/* =========================================================
+   STATUS BAR
+   ========================================================= */
+
+.statusbar {
+    height: 25px;
+    min-height: 25px;
+    padding: 0 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #103723;
+    color: #c6dfce;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.status-left,
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.status-item {
+    cursor: pointer;
+}
+
+.status-item:hover {
+    color: white;
+}
+
+.status-connection {
+    color: var(--emerald-light);
+}
+
+/* =========================================================
+   MODALS, COMMAND PALETTE AND QUICK OPEN
+   ========================================================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 13vh;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(5px);
+}
+
+.overlay.visible {
+    display: flex;
+}
+
+.dialog {
+    width: min(570px, calc(100vw - 30px));
+    max-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #0b2017;
+    border: 1px solid #2c5940;
+    border-radius: 10px;
+    box-shadow: 0 22px 80px rgba(0,0,0,0.45);
+}
+
+.dialog-header {
+    padding: 13px 15px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.dialog-input {
+    padding: 14px 15px;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    outline: 0;
+    background: #081910;
+    color: var(--text);
+    font-family: var(--ui-font);
+    font-size: 16px;
+}
+
+.dialog-list {
+    max-height: 360px;
+    overflow: auto;
+    padding: 5px;
+}
+
+.dialog-item {
+    width: 100%;
+    padding: 9px 11px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dialog-item:hover,
+.dialog-item.selected {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.dialog-item-description {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.settings-content {
+    padding: 16px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.setting-row input[type="number"] {
+    width: 70px;
+    padding: 6px;
+    color: var(--text);
+    background: #081910;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+
+.settings-footer {
+    padding: 11px 15px;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border);
+}
+
+.primary-button {
+    border: 0;
+    border-radius: 5px;
+    padding: 8px 14px;
+    background: var(--emerald);
+    color: #06170e;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background: var(--emerald-light);
+}
+
+.secondary-button {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 14px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.secondary-button:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+.notification-stack {
+    position: fixed;
+    z-index: 800;
+    right: 17px;
+    bottom: 38px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.notification {
+    min-width: 220px;
+    max-width: 360px;
+    padding: 10px 13px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--emerald);
+    border-radius: 6px;
+    background: #10291e;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    color: var(--text);
+    font-size: 13px;
+    animation: notification-in 0.18s ease;
+}
+
+.notification.error {
+    border-left-color: var(--red);
+}
+
+.notification.warning {
+    border-left-color: var(--yellow);
+}
+
+@keyframes notification-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================= */
+
+@media (max-width: 900px) {
+    :root {
+        --sidebar-width: 220px;
+        --right-width: 250px;
+    }
+
+    .brand-description {
+        display: none;
+    }
+
+    .project-indicator {
+        display: none;
+    }
+}
+
+@media (max-width: 650px) {
+    .top-menu {
+        display: none;
+    }
+
+    .sidebar {
+        width: 190px;
+        min-width: 190px;
+    }
+
+    .right-panel {
+        display: none !important;
+    }
+
+    .welcome-shortcuts {
+        grid-template-columns: 1fr;
+    }
+
+    .status-right {
+        display: none;
+    }
+}
+
+/* =========================================================
+   ACCESSIBILITY AND FOCUS
+   ========================================================= */
+
+button:focus-visible,
+.tree-row:focus-visible,
+.editor-tab:focus-visible {
+    outline: 1px solid var(--emerald-light);
+    outline-offset: -2px;
+}
+
+[hidden] {
+    display: none !important;
+}
+</style>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">S</div>
-    <div>
-      <div class="brand-name">SHARP <b>CODE</b></div>
-      <div class="brand-subtitle">DEVELOPMENT ENVIRONMENT</div>
+<div class="app-shell">
+
+    <!-- =====================================================
+         TITLE BAR
+         ===================================================== -->
+
+    <header class="titlebar">
+
+        <div class="brand">
+            <span class="brand-name">Sharp Code</span>
+            <span class="brand-description">Development Workspace</span>
+        </div>
+
+        <nav class="top-menu" aria-label="Main menu">
+            <button class="menu-button" data-command="file-menu">File</button>
+            <button class="menu-button" data-command="edit-menu">Edit</button>
+            <button class="menu-button" data-command="view-menu">View</button>
+            <button class="menu-button" data-command="go-menu">Go</button>
+            <button class="menu-button" data-command="run-menu">Run</button>
+            <button class="menu-button" data-command="terminal-menu">Terminal</button>
+            <button class="menu-button" data-command="help-menu">Help</button>
+        </nav>
+
+        <div class="titlebar-spacer"></div>
+
+        <div class="project-indicator" id="topProjectName">
+            No project opened
+        </div>
+
+        <div class="top-actions">
+            <button class="top-action" id="commandPaletteButton" title="Command Palette">
+                ⌘ Commands
+            </button>
+
+            <button class="top-action" id="openProjectButton">
+                Open Project
+            </button>
+
+            <button class="top-action primary" id="saveButton">
+                Save
+            </button>
+        </div>
+
+    </header>
+
+    <!-- =====================================================
+         MAIN WORKSPACE
+         ===================================================== -->
+
+    <div class="workspace">
+
+        <!-- ACTIVITY BAR -->
+
+        <aside class="activity-bar">
+
+            <div class="activity-group">
+
+                <button class="activity-button active"
+                        data-view="explorer"
+                        title="Explorer">
+                    ▤
+                    <span class="activity-tooltip">Explorer</span>
+                </button>
+
+                <button class="activity-button"
+                        data-view="search"
+                        title="Search">
+                    ⌕
+                    <span class="activity-tooltip">Search</span>
+                </button>
+
+                <button class="activity-button"
+                        data-view="git"
+                        title="Source Control">
+                    ◇
+                    <span class="activity-tooltip">Source Control</span>
+                </button>
+
+                <button class="activity-button"
+                        data-view="outline"
+                        title="Outline">
+                    ☷
+                    <span class="activity-tooltip">Outline</span>
+                </button>
+
+            </div>
+
+            <div class="activity-group">
+
+                <button class="activity-button"
+                        id="assistantToggle"
+                        title="Assistant">
+                    ✦
+                    <span class="activity-tooltip">Assistant</span>
+                </button>
+
+                <button class="activity-button"
+                        id="settingsButton"
+                        title="Settings">
+                    ⚙
+                    <span class="activity-tooltip">Settings</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+        <!-- LEFT SIDEBAR -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-header">
+
+                <span class="sidebar-title" id="sidebarTitle">
+                    Explorer
+                </span>
+
+                <div class="sidebar-header-actions">
+
+                    <button class="small-icon-button"
+                            id="newFileButton"
+                            title="New File">
+                        +
+                    </button>
+
+                    <button class="small-icon-button"
+                            id="newFolderButton"
+                            title="New Folder">
+                        ▱
+                    </button>
+
+                    <button class="small-icon-button"
+                            id="refreshTreeButton"
+                            title="Refresh">
+                        ↻
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="sidebar-content">
+
+                <!-- EXPLORER VIEW -->
+
+                <section class="panel-view" id="explorerView">
+
+                    <div class="project-heading">
+
+                        <div class="project-heading-top">
+
+                            <div class="project-name" id="projectName">
+                                No Folder Open
+                            </div>
+
+                            <div class="project-tools">
+                                <button class="project-tool" id="openFolderSmall">
+                                    Open
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="project-path" id="projectPath">
+                            Open a project to start working
+                        </div>
+
+                    </div>
+
+                    <div class="sidebar-section">
+                        <span>Project Files</span>
+                        <span id="fileCount">0</span>
+                    </div>
+
+                    <div class="tree-root" id="fileTree">
+
+                        <div class="tree-empty">
+                            No project is currently open.
+                            <br><br>
+                            Open a folder to browse and edit its files.
+                        </div>
+
+                    </div>
+
+                    <div class="sidebar-footer" id="explorerFooter">
+                        Workspace inactive
+                    </div>
+
+                </section>
+
+                <!-- SEARCH VIEW -->
+
+                <section class="panel-view" id="searchView" hidden>
+
+                    <div class="search-area">
+
+                        <label class="field-label" for="projectSearchInput">
+                            Search in files
+                        </label>
+
+                        <input
+                            class="text-input"
+                            id="projectSearchInput"
+                            type="text"
+                            placeholder="Search project..."
+                        >
+
+                        <input
+                            class="text-input"
+                            id="projectSearchExclude"
+                            type="text"
+                            placeholder="Exclude folders (optional)"
+                        >
+
+                        <div class="search-options">
+                            <label>
+                                <input type="checkbox" id="caseSensitive">
+                                Match case
+                            </label>
+
+                            <label>
+                                <input type="checkbox" id="wholeWord">
+                                Whole word
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class="sidebar-section">
+                        <span>Results</span>
+                        <span id="searchResultCount">0</span>
+                    </div>
+
+                    <div id="searchResults">
+                        <div class="tree-empty">
+                            Enter a search term to find text in your project.
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- SOURCE CONTROL VIEW -->
+
+                <section class="panel-view" id="gitView" hidden>
+
+                    <div class="sidebar-section">
+                        <span>Source Control</span>
+
+                        <button class="small-icon-button" id="refreshGitButton">
+                            ↻
+                        </button>
+                    </div>
+
+                    <div class="search-area">
+
+                        <div class="field-label">
+                            Git working tree status
+                        </div>
+
+                        <button class="welcome-button" id="gitRefreshLarge">
+                            Refresh Git Status
+                        </button>
+
+                    </div>
+
+                    <div id="gitSidebarContent" class="tree-empty">
+                        Open a project to inspect Git status.
+                    </div>
+
+                </section>
+
+                <!-- OUTLINE VIEW -->
+
+                <section class="panel-view" id="outlineView" hidden>
+
+                    <div class="sidebar-section">
+                        <span>Document Outline</span>
+                    </div>
+
+                    <div id="outlineContent" class="tree-empty">
+                        Open a document to view its outline.
+                    </div>
+
+                </section>
+
+            </div>
+
+        </aside>
+
+        <!-- EDITOR AREA -->
+
+        <main class="editor-area">
+
+            <!-- TABS -->
+
+            <div class="editor-tabs" id="editorTabs"></div>
+
+            <!-- EDITOR TOOLBAR -->
+
+            <div class="editor-toolbar">
+
+                <div class="breadcrumbs" id="breadcrumbs">
+                    <span>Sharp Code</span>
+                    <span>›</span>
+                    <span class="breadcrumb-current">Welcome</span>
+                </div>
+
+                <div class="editor-actions">
+
+                    <button class="editor-action" id="editorFindButton">
+                        Find
+                    </button>
+
+                    <button class="editor-action" id="editorSaveButton">
+                        Save
+                    </button>
+
+                    <button class="editor-action" id="editorSplitButton"
+                            title="Split editor is not configured">
+                        Split
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- EDITOR STAGE -->
+
+            <section class="editor-stage">
+
+                <div id="monacoMount"></div>
+
+                <textarea
+                    id="codeFallback"
+                    spellcheck="false"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    aria-label="Code editor"
+                    placeholder="Start writing code..."
+                ></textarea>
+
+                <div class="welcome-screen" id="welcomeScreen">
+
+                    <div class="welcome-heading">
+                        Sharp <span>Code</span>
+                    </div>
+
+                    <div class="welcome-description">
+                        A focused development environment for building,
+                        editing, and managing software projects.
+                    </div>
+
+                    <div class="welcome-actions">
+
+                        <button class="welcome-button primary"
+                                id="welcomeOpenProject">
+                            Open Project
+                        </button>
+
+                        <button class="welcome-button"
+                                id="welcomeNewFile">
+                            New File
+                        </button>
+
+                        <button class="welcome-button"
+                                id="welcomeOpenFile">
+                            Open File
+                        </button>
+
+                    </div>
+
+                    <div class="welcome-shortcuts">
+
+                        <span>Open Command Palette</span>
+                        <span class="shortcut-key">Ctrl + Shift + P</span>
+
+                        <span>Open File</span>
+                        <span class="shortcut-key">Ctrl + P</span>
+
+                        <span>Save Current File</span>
+                        <span class="shortcut-key">Ctrl + S</span>
+
+                        <span>Toggle Sidebar</span>
+                        <span class="shortcut-key">Ctrl + B</span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- BOTTOM PANEL -->
+
+            <section class="bottom-panel" id="bottomPanel">
+
+                <div class="bottom-header">
+
+                    <div class="bottom-tabs">
+
+                        <button class="bottom-tab active"
+                                data-bottom="problems">
+                            Problems
+                        </button>
+
+                        <button class="bottom-tab"
+                                data-bottom="output">
+                            Output
+                        </button>
+
+                        <button class="bottom-tab"
+                                data-bottom="terminal">
+                            Terminal
+                        </button>
+
+                        <button class="bottom-tab"
+                                data-bottom="git">
+                            Git
+                        </button>
+
+                    </div>
+
+                    <button class="small-icon-button" id="closeBottomPanel">
+                        ×
+                    </button>
+
+                </div>
+
+                <div class="bottom-content">
+
+                    <div class="bottom-view active" id="problemsBottom">
+                        <div class="terminal-message">
+                            Problems reported by the active editor will appear here.
+                        </div>
+                        <div id="problemList"></div>
+                    </div>
+
+                    <div class="bottom-view" id="outputBottom">
+                        <div id="outputList"></div>
+                    </div>
+
+                    <div class="bottom-view" id="terminalBottom">
+
+                        <div id="terminalMessages">
+                            <div class="terminal-message">
+                                Sharp Code Terminal
+                            </div>
+
+                            <div class="terminal-message">
+                                A system terminal bridge is not currently exposed
+                                by the main process.
+                            </div>
+                        </div>
+
+                        <form id="terminalForm" class="terminal-line">
+
+                            <span class="terminal-prompt">›</span>
+
+                            <input
+                                class="terminal-input"
+                                id="terminalInput"
+                                type="text"
+                                placeholder="Terminal is unavailable until a terminal bridge is added"
+                                disabled
+                            >
+
+                        </form>
+
+                    </div>
+
+                    <div class="bottom-view" id="gitBottom">
+                        <div id="gitBottomContent">
+                            Git status will appear here.
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- RIGHT ASSISTANT PANEL -->
+
+        <aside class="right-panel" id="rightPanel">
+
+            <div class="right-panel-header">
+
+                <span>Assistant</span>
+
+                <button class="small-icon-button" id="closeRightPanel">
+                    ×
+                </button>
+
+            </div>
+
+            <div class="right-panel-content">
+
+                <div class="assistant-intro">
+
+                    <div class="assistant-intro-title">
+                        Development Assistant
+                    </div>
+
+                    <div class="assistant-intro-text">
+                        Ask questions about code, debugging, project structure,
+                        or programming concepts.
+                    </div>
+
+                </div>
+
+                <div class="sidebar-section">
+                    Suggested tasks
+                </div>
+
+                <button class="assistant-suggestion" data-prompt="Explain the current file.">
+                    Explain the current file
+                </button>
+
+                <button class="assistant-suggestion" data-prompt="Help me find possible bugs in this code.">
+                    Find possible bugs
+                </button>
+
+                <button class="assistant-suggestion" data-prompt="Suggest improvements to the project structure.">
+                    Improve project structure
+                </button>
+
+                <button class="assistant-suggestion" data-prompt="Explain this programming concept.">
+                    Explain a programming concept
+                </button>
+
+                <div class="assistant-compose">
+
+                    <textarea
+                        id="assistantInput"
+                        placeholder="Ask about your code..."
+                    ></textarea>
+
+                    <button class="primary-button" id="assistantSend">
+                        Send
+                    </button>
+
+                </div>
+
+                <div class="assistant-note" id="assistantStatus">
+                    An AI provider is not connected yet. The interface will
+                    use an AI bridge when one is exposed by the application.
+                </div>
+
+                <div id="assistantResponse"></div>
+
+            </div>
+
+        </aside>
+
     </div>
-  </div>
 
-  <div class="toolbar">
-    <button id="newFile">New</button>
-    <button id="openProject">Open Folder</button>
-    <button id="openFile">Open File</button>
-    <button id="saveFile" class="primary">Save</button>
-  </div>
+    <!-- =====================================================
+         STATUS BAR
+         ===================================================== -->
 
-  <button id="commandButton" class="command-button">
-    ⌕ Command Palette
-  </button>
-</header>
+    <footer class="statusbar">
 
-<main class="workspace">
+        <div class="status-left">
 
-  <aside class="sidebar">
-    <div class="side-heading">EXPLORER</div>
+            <span class="status-item status-connection" id="statusProject">
+                ● No Project
+            </span>
 
-    <div id="projectTitle" class="project-title">
-      NO PROJECT OPEN
-    </div>
+            <span class="status-item" id="statusBranch">
+                ◇ Git
+            </span>
 
-    <div id="fileTree" class="file-tree">
-      <div class="empty-tree">Open a folder to get started.</div>
-    </div>
+            <span class="status-item" id="statusProblems">
+                0 Problems
+            </span>
 
-    <div class="side-heading tools-heading">DEVELOPMENT</div>
+        </div>
 
-    <button class="tool active" data-panel="editor">⌘ Code Editor</button>
-    <button class="tool" data-panel="ai">✦ Sharp AI</button>
-    <button class="tool" data-panel="terminal">▤ Terminal</button>
-    <button class="tool" data-panel="studio">◈ Game Studio</button>
+        <div class="status-right">
 
-    <div class="sidebar-bottom">
-      <span class="green-dot"></span>
-      Sharp Code 0.2.0
-    </div>
-  </aside>
+            <span class="status-item" id="statusCursor">
+                Ln 1, Col 1
+            </span>
 
-  <section class="editor-area">
+            <span class="status-item" id="statusSpaces">
+                Spaces: 4
+            </span>
 
-    <div class="tabbar" id="tabs"></div>
+            <span class="status-item" id="statusEncoding">
+                UTF-8
+            </span>
 
-    <div class="editor-heading">
-      <div>
-        <span class="breadcrumb" id="breadcrumb">Workspace</span>
-      </div>
-      <span id="languageLabel">PLAINTEXT</span>
-    </div>
+            <span class="status-item" id="statusLanguage">
+                Plain Text
+            </span>
 
-    <div id="editor"></div>
+            <span class="status-item" id="statusEditor">
+                Sharp Editor
+            </span>
 
-    <section class="console-panel">
-      <div class="console-header">
-        <span>OUTPUT</span>
-        <button id="clearConsole">Clear</button>
-      </div>
-      <div id="consoleOutput"></div>
-    </section>
+        </div>
 
-  </section>
+    </footer>
 
-</main>
-
-<footer class="statusbar">
-  <div>
-    <span class="green-dot"></span>
-    <span id="status">Initializing...</span>
-  </div>
-
-  <div class="status-right">
-    <span id="cursorPosition">Ln 1, Col 1</span>
-    <span id="encoding">UTF-8</span>
-    <span id="languageStatus">Plain Text</span>
-    <span>SHARP CODE</span>
-  </div>
-</footer>
-
-<div id="commandPalette" class="command-overlay" hidden>
-  <div class="command-box">
-    <input id="commandSearch" placeholder="Search commands...">
-    <div id="commandResults"></div>
-  </div>
 </div>
 
-<div id="settingsModal" class="modal-overlay" hidden>
-  <div class="modal">
-    <h2>Sharp Code Settings</h2>
+<!-- =========================================================
+     COMMAND PALETTE
+     ========================================================= -->
 
-    <label>Editor font size</label>
-    <input id="fontSize" type="number" min="10" max="30" value="14">
+<div class="overlay" id="commandOverlay">
 
-    <label>Editor theme</label>
-    <select id="themeSelect">
-      <option value="emerald">Emerald</option>
-      <option value="forest">Forest</option>
-      <option value="midnight">Midnight</option>
-      <option value="obsidian">Obsidian</option>
-    </select>
+    <div class="dialog">
 
-    <label>Word wrap</label>
-    <select id="wordWrap">
-      <option value="off">Off</option>
-      <option value="on">On</option>
-    </select>
+        <div class="dialog-header">
+            Command Palette
+        </div>
 
-    <div class="modal-actions">
-      <button id="resetSettings">Reset</button>
-      <button id="closeSettings" class="primary">Close</button>
+        <input
+            class="dialog-input"
+            id="commandInput"
+            type="text"
+            placeholder="Search commands..."
+            autocomplete="off"
+        >
+
+        <div class="dialog-list" id="commandList"></div>
+
     </div>
-  </div>
+
 </div>
+
+<!-- =========================================================
+     QUICK OPEN
+     ========================================================= -->
+
+<div class="overlay" id="quickOpenOverlay">
+
+    <div class="dialog">
+
+        <div class="dialog-header">
+            Quick Open
+        </div>
+
+        <input
+            class="dialog-input"
+            id="quickOpenInput"
+            type="text"
+            placeholder="Search files by name..."
+            autocomplete="off"
+        >
+
+        <div class="dialog-list" id="quickOpenList"></div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     SETTINGS
+     ========================================================= -->
+
+<div class="overlay" id="settingsOverlay">
+
+    <div class="dialog">
+
+        <div class="dialog-header">
+            Editor Settings
+        </div>
+
+        <div class="settings-content">
+
+            <label class="setting-row">
+                <span>Editor font size</span>
+                <input type="number" id="settingFontSize"
+                       min="10" max="28" value="14">
+            </label>
+
+            <label class="setting-row">
+                <span>Tab size</span>
+                <input type="number" id="settingTabSize"
+                       min="1" max="8" value="4">
+            </label>
+
+            <label class="setting-row">
+                <span>Word wrap</span>
+                <input type="checkbox" id="settingWordWrap">
+            </label>
+
+            <label class="setting-row">
+                <span>Minimap</span>
+                <input type="checkbox" id="settingMinimap">
+            </label>
+
+            <label class="setting-row">
+                <span>Line numbers</span>
+                <input type="checkbox" id="settingLineNumbers" checked>
+            </label>
+
+            <label class="setting-row">
+                <span>Auto save</span>
+                <input type="checkbox" id="settingAutoSave">
+            </label>
+
+        </div>
+
+        <div class="settings-footer">
+            <button class="primary-button" id="applySettings">
+                Apply Settings
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     NOTIFICATIONS
+     ========================================================= -->
+
+<div class="notification-stack" id="notificationStack"></div>
+
+<!-- =========================================================
+     MONACO EDITOR
+     ========================================================= -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
 
-<script src="src/editor/themes.js"></script>
-<script src="src/projects/project-manager.js"></script>
-<script src="src/js/console.js"></script>
-<script src="src/js/settings.js"></script>
-<script src="src/js/tabs.js"></script>
-<script src="src/js/explorer.js"></script>
-<script src="src/js/commands.js"></script>
-<script src="src/js/app.js"></script>
+<script>
+/* =========================================================
+   SHARP CODE APPLICATION ENGINE
+   ========================================================= */
+
+"use strict";
+
+/* =========================================================
+   DOM UTILITIES
+   ========================================================= */
+
+const $ = (selector) => document.querySelector(selector);
+
+const $$ = (selector) => Array.from(
+    document.querySelectorAll(selector)
+);
+
+const elements = {
+    sidebar: $("#sidebar"),
+    fileTree: $("#fileTree"),
+    editorTabs: $("#editorTabs"),
+    welcomeScreen: $("#welcomeScreen"),
+    monacoMount: $("#monacoMount"),
+    codeFallback: $("#codeFallback"),
+    bottomPanel: $("#bottomPanel"),
+    rightPanel: $("#rightPanel"),
+
+    projectName: $("#projectName"),
+    projectPath: $("#projectPath"),
+    topProjectName: $("#topProjectName"),
+
+    commandOverlay: $("#commandOverlay"),
+    commandInput: $("#commandInput"),
+    commandList: $("#commandList"),
+
+    quickOpenOverlay: $("#quickOpenOverlay"),
+    quickOpenInput: $("#quickOpenInput"),
+    quickOpenList: $("#quickOpenList"),
+
+    settingsOverlay: $("#settingsOverlay"),
+    notificationStack: $("#notificationStack")
+};
+
+/* =========================================================
+   APPLICATION STATE
+   ========================================================= */
+
+const state = {
+    root: null,
+    projectName: null,
+
+    activeDocument: null,
+    documents: [],
+
+    allFiles: [],
+    treeSelection: null,
+
+    editor: null,
+    monacoReady: false,
+    monacoLoading: false,
+
+    sidebarView: "explorer",
+    bottomView: "problems",
+
+    sidebarVisible: true,
+    bottomVisible: false,
+    assistantVisible: false,
+
+    settings: {
+        fontSize: 14,
+        tabSize: 4,
+        wordWrap: false,
+        minimap: false,
+        lineNumbers: true,
+        autoSave: false
+    },
+
+    commandSelection: 0,
+    quickOpenSelection: 0,
+
+    searchTimer: null,
+    searchResults: [],
+
+    nextDocumentId: 1,
+    output: []
+};
+
+/* =========================================================
+   BRIDGE UTILITIES
+   ========================================================= */
+
+const sharp = window.sharp || null;
+
+function hasBridge() {
+    return Boolean(sharp);
+}
+
+function getBridgeMethod(names) {
+    if (!sharp) return null;
+
+    for (const name of names) {
+        if (typeof sharp[name] === "function") {
+            return sharp[name].bind(sharp);
+        }
+    }
+
+    return null;
+}
+
+async function bridgeCall(names, ...args) {
+    const method = getBridgeMethod(names);
+
+    if (!method) {
+        throw new Error(
+            "The required application bridge is not available: " +
+            names.join(" / ")
+        );
+    }
+
+    return await method(...args);
+}
+
+function explainError(error) {
+    if (!error) return "Unknown error";
+    return error.message || String(error);
+}
+
+/* =========================================================
+   GENERAL UTILITIES
+   ========================================================= */
+
+function notify(message, type = "success") {
+    const notification = document.createElement("div");
+
+    notification.className = "notification " + type;
+    notification.textContent = message;
+
+    elements.notificationStack.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3400);
+}
+
+function logOutput(message, type = "") {
+    const entry = {
+        message: String(message),
+        type,
+        time: new Date()
+    };
+
+    state.output.push(entry);
+
+    const row = document.createElement("div");
+    row.className = "output-line " + type;
+    row.textContent =
+        "[" + entry.time.toLocaleTimeString() + "] " + entry.message;
+
+    $("#outputList").appendChild(row);
+}
+
+function clearOutput() {
+    state.output = [];
+    $("#outputList").innerHTML = "";
+}
+
+function basename(path) {
+    if (!path) return "Untitled";
+
+    const parts = String(path).split(/[\\/]/);
+    return parts[parts.length - 1] || path;
+}
+
+function joinPath(parent, child) {
+    const separator =
+        String(parent).includes("\\") &&
+        !String(parent).includes("/")
+            ? "\\"
+            : "/";
+
+    return String(parent).replace(/[\\/]+$/, "") +
+        separator +
+        String(child).replace(/^[\\/]+/, "");
+}
+
+function getRelativePath(path, root = state.root) {
+    if (!path || !root) return path || "";
+
+    const normalizedRoot = root.replace(/[\\/]+$/, "");
+    const normalizedPath = path.replace(/[\\/]+$/, "");
+
+    if (normalizedPath.startsWith(normalizedRoot)) {
+        return normalizedPath.slice(normalizedRoot.length)
+            .replace(/^[\\/]/, "");
+    }
+
+    return path;
+}
+
+function normalizeFileContent(result) {
+    if (typeof result === "string") return result;
+
+    if (result && typeof result.content === "string") {
+        return result.content;
+    }
+
+    if (result && typeof result.data === "string") {
+        return result.data;
+    }
+
+    return "";
+}
+
+function normalizeProjectPath(result) {
+    if (typeof result === "string") return result;
+
+    if (!result || typeof result !== "object") return null;
+
+    return (
+        result.path ||
+        result.root ||
+        result.directory ||
+        result.folderPath ||
+        result.projectPath ||
+        null
+    );
+}
+
+function normalizeEntries(result) {
+    if (Array.isArray(result)) return result;
+
+    if (!result || typeof result !== "object") return [];
+
+    if (Array.isArray(result.entries)) return result.entries;
+    if (Array.isArray(result.items)) return result.items;
+    if (Array.isArray(result.files)) return result.files;
+
+    return [];
+}
+
+function isDirectoryEntry(entry) {
+    return Boolean(
+        entry.isDirectory === true ||
+        entry.isFolder === true ||
+        entry.type === "directory" ||
+        entry.type === "folder" ||
+        entry.kind === "directory"
+    );
+}
+
+function getEntryName(entry) {
+    return entry.name || basename(entry.path || "");
+}
+
+function getEntryPath(entry, parentPath) {
+    return entry.path || joinPath(parentPath, getEntryName(entry));
+}
+
+function languageFromPath(path) {
+    const extension = basename(path).split(".").pop().toLowerCase();
+
+    const languages = {
+        js: "javascript",
+        jsx: "javascript",
+        mjs: "javascript",
+        cjs: "javascript",
+
+        ts: "typescript",
+        tsx: "typescript",
+
+        html: "html",
+        htm: "html",
+        css: "css",
+        scss: "scss",
+        less: "less",
+
+        json: "json",
+        jsonc: "json",
+
+        md: "markdown",
+        markdown: "markdown",
+
+        py: "python",
+        pyw: "python",
+
+        java: "java",
+        c: "c",
+        h: "c",
+        cpp: "cpp",
+        cc: "cpp",
+        hpp: "cpp",
+
+        cs: "csharp",
+        go: "go",
+        rs: "rust",
+        rb: "ruby",
+        php: "php",
+        swift: "swift",
+        kt: "kotlin",
+
+        sh: "shell",
+        bash: "shell",
+        zsh: "shell",
+
+        xml: "xml",
+        svg: "xml",
+        yaml: "yaml",
+        yml: "yaml",
+        toml: "toml",
+        sql: "sql",
+
+        txt: "plaintext",
+        log: "plaintext"
+    };
+
+    return languages[extension] || "plaintext";
+}
+
+function fileSymbol(path) {
+    const extension = basename(path).split(".").pop().toLowerCase();
+
+    const symbols = {
+        html: "◇",
+        css: "◈",
+        js: "◆",
+        jsx: "◆",
+        ts: "◆",
+        tsx: "◆",
+        json: "{}",
+        md: "¶",
+        py: "●",
+        cpp: "C",
+        c: "C",
+        h: "H",
+        rs: "R",
+        java: "J",
+        cs: "C",
+        go: "G",
+        sql: "▤",
+        svg: "◇"
+    };
+
+    return symbols[extension] || "·";
+}
+
+function escapeHTML(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+/* =========================================================
+   MONACO EDITOR INITIALIZATION
+   ========================================================= */
+
+function initializeMonaco() {
+    if (state.monacoReady || state.monacoLoading) return;
+
+    if (typeof window.require !== "function") {
+        showFallbackEditor();
+        logOutput(
+            "Monaco could not be loaded. Using the basic editor.",
+            "warning"
+        );
+        return;
+    }
+
+    state.monacoLoading = true;
+
+    try {
+        window.require.config({
+            paths: {
+                vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+            }
+        });
+
+        window.require(
+            ["vs/editor/editor.main"],
+            function () {
+                createMonacoEditor();
+            },
+            function (error) {
+                state.monacoLoading = false;
+                showFallbackEditor();
+
+                logOutput(
+                    "Monaco failed to initialize: " + explainError(error),
+                    "error"
+                );
+            }
+        );
+
+    } catch (error) {
+        state.monacoLoading = false;
+        showFallbackEditor();
+
+        logOutput(
+            "Editor initialization failed: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+function createMonacoEditor() {
+    if (!window.monaco) {
+        showFallbackEditor();
+        return;
+    }
+
+    monaco.editor.defineTheme("sharp-emerald", {
+        base: "vs-dark",
+        inherit: true,
+
+        rules: [
+            {
+                token: "comment",
+                foreground: "6E967C",
+                fontStyle: "italic"
+            },
+            {
+                token: "keyword",
+                foreground: "80D7A5"
+            },
+            {
+                token: "string",
+                foreground: "C5DDA0"
+            },
+            {
+                token: "number",
+                foreground: "D9BA79"
+            },
+            {
+                token: "type",
+                foreground: "83B7D5"
+            }
+        ],
+
+        colors: {
+            "editor.background": "#071811",
+            "editor.foreground": "#E5F0E7",
+            "editorLineNumber.foreground": "#54705D",
+            "editorLineNumber.activeForeground": "#A9CDB4",
+            "editorCursor.foreground": "#70D6A1",
+            "editor.selectionBackground": "#24563A",
+            "editor.inactiveSelectionBackground": "#183B29",
+            "editor.lineHighlightBackground": "#0A2117",
+            "editorIndentGuide.background": "#173524",
+            "editorIndentGuide.activeBackground": "#38694A",
+            "editorWidget.background": "#0D2418",
+            "editorWidget.border": "#254A34",
+            "editorSuggestWidget.background": "#10291D",
+            "editorSuggestWidget.border": "#315740",
+            "editorSuggestWidget.selectedBackground": "#1C4930",
+            "editorGutter.background": "#071811"
+        }
+    });
+
+    elements.monacoMount.style.display = "block";
+    elements.codeFallback.style.display = "none";
+
+    state.editor = monaco.editor.create(
+        elements.monacoMount,
+        {
+            value: "",
+            language: "plaintext",
+            theme: "sharp-emerald",
+
+            automaticLayout: true,
+            fontFamily: '"Alegreya Sans Mono", monospace',
+            fontSize: state.settings.fontSize,
+            fontLigatures: true,
+
+            minimap: {
+                enabled: state.settings.minimap
+            },
+
+            lineNumbers: state.settings.lineNumbers
+                ? "on"
+                : "off",
+
+            tabSize: state.settings.tabSize,
+            insertSpaces: true,
+            wordWrap: state.settings.wordWrap
+                ? "on"
+                : "off",
+
+            scrollBeyondLastLine: false,
+            smoothScrolling: true,
+            cursorBlinking: "smooth",
+            cursorSmoothCaretAnimation: "on",
+            renderWhitespace: "selection",
+
+            padding: {
+                top: 15,
+                bottom: 15
+            },
+
+            folding: true,
+            foldingHighlight: true,
+            bracketPairColorization: {
+                enabled: true
+            },
+
+            guides: {
+                indentation: true,
+                bracketPairs: true
+            },
+
+            suggest: {
+                showWords: true
+            },
+
+            accessibilitySupport: "auto"
+        }
+    );
+
+    state.monacoReady = true;
+    state.monacoLoading = false;
+
+    state.documents.forEach((doc) => {
+        doc.model = monaco.editor.createModel(
+            doc.content,
+            languageFromPath(doc.path || doc.name)
+        );
+    });
+
+    if (state.activeDocument) {
+        state.editor.setModel(state.activeDocument.model);
+    }
+
+    state.editor.onDidChangeModelContent(() => {
+        const doc = state.activeDocument;
+        if (!doc) return;
+
+        doc.content = state.editor.getValue();
+        doc.dirty = true;
+
+        renderTabs();
+        updateStatus();
+    });
+
+    state.editor.onDidChangeCursorPosition((event) => {
+        $("#statusCursor").textContent =
+            "Ln " + event.position.lineNumber +
+            ", Col " + event.position.column;
+    });
+
+    state.editor.onDidChangeCursorSelection((event) => {
+        if (event.selection && !event.selection.isEmpty()) {
+            const lines =
+                Math.abs(
+                    event.selection.endLineNumber -
+                    event.selection.startLineNumber
+                ) + 1;
+
+            $("#statusCursor").textContent =
+                lines + " lines selected";
+        }
+    });
+
+    notify("Monaco Editor initialized");
+    logOutput("Sharp Code editor initialized.", "success");
+
+    if (state.activeDocument) {
+        activateDocument(state.activeDocument.id);
+    }
+}
+
+function showFallbackEditor() {
+    elements.monacoMount.style.display = "none";
+    elements.codeFallback.style.display = "block";
+
+    elements.codeFallback.addEventListener(
+        "input",
+        () => {
+            if (!state.activeDocument) return;
+
+            state.activeDocument.content =
+                elements.codeFallback.value;
+
+            state.activeDocument.dirty = true;
+
+            renderTabs();
+            updateStatus();
+        }
+    );
+}
+
+/* =========================================================
+   DOCUMENT MANAGEMENT
+   ========================================================= */
+
+function createDocument(path, content = "") {
+    const doc = {
+        id: state.nextDocumentId++,
+        path: path || null,
+        name: path ? basename(path) : "Untitled",
+        content: String(content),
+        dirty: false,
+        model: null
+    };
+
+    if (state.monacoReady) {
+        doc.model = monaco.editor.createModel(
+            doc.content,
+            languageFromPath(doc.path || doc.name)
+        );
+    }
+
+    state.documents.push(doc);
+
+    return doc;
+}
+
+function findDocument(path) {
+    return state.documents.find(
+        doc => doc.path === path
+    );
+}
+
+function renderTabs() {
+    elements.editorTabs.innerHTML = "";
+
+    state.documents.forEach((doc) => {
+        const tab = document.createElement("div");
+
+        tab.className = "editor-tab" +
+            (state.activeDocument?.id === doc.id ? " active" : "");
+
+        const symbol = document.createElement("span");
+        symbol.textContent = fileSymbol(doc.path || doc.name);
+        symbol.style.color = "var(--emerald)";
+
+        const name = document.createElement("span");
+        name.className = "tab-name";
+        name.textContent = doc.name;
+
+        const dirty = document.createElement("span");
+        if (doc.dirty) {
+            dirty.className = "tab-dirty";
+            dirty.title = "Unsaved changes";
+        }
+
+        const close = document.createElement("button");
+        close.className = "tab-close";
+        close.textContent = "×";
+        close.title = "Close tab";
+
+        close.addEventListener("click", (event) => {
+            event.stopPropagation();
+            closeDocument(doc.id);
+        });
+
+        tab.append(symbol, name);
+
+        if (doc.dirty) {
+            tab.appendChild(dirty);
+        }
+
+        tab.appendChild(close);
+
+        tab.addEventListener("click", () => {
+            activateDocument(doc.id);
+        });
+
+        elements.editorTabs.appendChild(tab);
+    });
+}
+
+function activateDocument(id) {
+    const doc = state.documents.find(
+        item => item.id === id
+    );
+
+    if (!doc) return;
+
+    state.activeDocument = doc;
+
+    elements.welcomeScreen.hidden = true;
+
+    if (state.monacoReady && doc.model) {
+        elements.monacoMount.style.display = "block";
+        elements.codeFallback.style.display = "none";
+
+        state.editor.setModel(doc.model);
+        state.editor.focus();
+
+    } else {
+        elements.monacoMount.style.display = "none";
+        elements.codeFallback.style.display = "block";
+
+        elements.codeFallback.value = doc.content;
+        elements.codeFallback.focus();
+    }
+
+    updateBreadcrumbs();
+    updateStatus();
+    updateOutline();
+    renderTabs();
+}
+
+function syncActiveDocument() {
+    if (!state.activeDocument) return;
+
+    if (state.monacoReady && state.editor) {
+        state.activeDocument.content =
+            state.editor.getValue();
+    } else {
+        state.activeDocument.content =
+            elements.codeFallback.value;
+    }
+}
+
+async function openProjectFile(path) {
+    if (!path) return;
+
+    const existing = findDocument(path);
+
+    if (existing) {
+        activateDocument(existing.id);
+        return;
+    }
+
+    try {
+        notify("Opening " + basename(path) + "...");
+
+        const result = await bridgeCall(
+            ["readProjectFile", "readFile"],
+            path
+        );
+
+        const content = normalizeFileContent(result);
+        const doc = createDocument(path, content);
+
+        activateDocument(doc.id);
+
+        logOutput("Opened " + getRelativePath(path), "success");
+
+    } catch (error) {
+        notify(
+            "Could not open file: " + explainError(error),
+            "error"
+        );
+
+        logOutput(explainError(error), "error");
+    }
+}
+
+function newUntitledDocument() {
+    const doc = createDocument(null, "");
+
+    activateDocument(doc.id);
+    renderTabs();
+
+    logOutput("Created a new untitled document.");
+}
+
+async function openFileFromDialog() {
+    try {
+        const result = await bridgeCall(
+            ["openFile", "openSingleFile"]
+        );
+
+        if (!result || result.canceled) return;
+
+        const path = normalizeProjectPath(result);
+
+        const content = normalizeFileContent(result);
+
+        if (path) {
+            const existing = findDocument(path);
+
+            if (existing) {
+                activateDocument(existing.id);
+            } else {
+                const doc = createDocument(path, content);
+                activateDocument(doc.id);
+            }
+
+        } else {
+            const doc = createDocument(null, content);
+            activateDocument(doc.id);
+        }
+
+    } catch (error) {
+        notify(
+            "Open File failed: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+async function saveDocument(doc) {
+    if (!doc) return false;
+
+    try {
+        let path = doc.path;
+
+        const result = await bridgeCall(
+            ["saveFile", "writeFile"],
+            {
+                path,
+                content: doc.content
+            }
+        );
+
+        if (result && typeof result === "object") {
+            path = result.path || path;
+        }
+
+        if (path) {
+            doc.path = path;
+            doc.name = basename(path);
+        }
+
+        doc.dirty = false;
+
+        renderTabs();
+        updateBreadcrumbs();
+        updateStatus();
+
+        logOutput(
+            "Saved " + (doc.path || doc.name),
+            "success"
+        );
+
+        return true;
+
+    } catch (error) {
+        notify(
+            "Save failed: " + explainError(error),
+            "error"
+        );
+
+        logOutput(
+            "Save failed: " + explainError(error),
+            "error"
+        );
+
+        return false;
+    }
+}
+
+async function saveCurrentDocument() {
+    syncActiveDocument();
+
+    if (!state.activeDocument) {
+        notify("There is no open file to save.", "warning");
+        return;
+    }
+
+    await saveDocument(state.activeDocument);
+}
+
+async function saveAllDocuments() {
+    syncActiveDocument();
+
+    const unsaved = state.documents.filter(
+        doc => doc.dirty
+    );
+
+    if (!unsaved.length) {
+        notify("All files are saved.");
+        return;
+    }
+
+    let saved = 0;
+
+    for (const doc of unsaved) {
+        if (await saveDocument(doc)) {
+            saved++;
+        }
+    }
+
+    notify(
+        saved + " of " + unsaved.length + " files saved."
+    );
+}
+
+function closeDocument(id) {
+    const index = state.documents.findIndex(
+        doc => doc.id === id
+    );
+
+    if (index < 0) return;
+
+    const doc = state.documents[index];
+
+    if (doc.dirty) {
+        const shouldClose = confirm(
+            doc.name + " contains unsaved changes. Close it anyway?"
+        );
+
+        if (!shouldClose) return;
+    }
+
+    if (doc.model && state.monacoReady) {
+        doc.model.dispose();
+    }
+
+    state.documents.splice(index, 1);
+
+    if (state.activeDocument?.id === id) {
+        state.activeDocument = null;
+
+        const next = state.documents[
+            Math.max(0, index - 1)
+        ];
+
+        if (next) {
+            activateDocument(next.id);
+        } else {
+            elements.welcomeScreen.hidden = false;
+            elements.monacoMount.style.display = "none";
+            elements.codeFallback.style.display = "none";
+        }
+    }
+
+    renderTabs();
+    updateBreadcrumbs();
+    updateStatus();
+}
+
+/* =========================================================
+   PROJECT MANAGEMENT
+   ========================================================= */
+
+async function openProject() {
+    try {
+        const result = await bridgeCall(
+            ["openProject", "selectProject"]
+        );
+
+        if (!result || result.canceled) return;
+
+        const root = normalizeProjectPath(result);
+
+        if (!root) {
+            notify(
+                "The project dialog did not return a folder path.",
+                "error"
+            );
+            return;
+        }
+
+        state.root = root;
+        state.projectName = basename(root);
+
+        elements.projectName.textContent = state.projectName;
+        elements.projectPath.textContent = root;
+        elements.topProjectName.textContent = state.projectName;
+
+        $("#statusProject").textContent =
+            "● " + state.projectName;
+
+        $("#explorerFooter").textContent =
+            "Project opened";
+
+        await refreshFileTree();
+
+        logOutput(
+            "Project opened: " + root,
+            "success"
+        );
+
+        notify("Project opened successfully.");
+
+    } catch (error) {
+        notify(
+            "Could not open project: " + explainError(error),
+            "error"
+        );
+
+        logOutput(explainError(error), "error");
+    }
+}
+
+async function refreshFileTree() {
+    if (!state.root) {
+        notify("Open a project first.", "warning");
+        return;
+    }
+
+    elements.fileTree.innerHTML = "";
+    state.allFiles = [];
+
+    try {
+        const entries = await readDirectory(state.root);
+
+        if (!entries.length) {
+            elements.fileTree.innerHTML =
+                '<div class="tree-empty">This project folder is empty.</div>';
+
+            updateFileCount();
+            return;
+        }
+
+        const sorted = sortEntries(entries);
+
+        for (const entry of sorted) {
+            const node = buildTreeNode(entry, state.root, 0);
+            elements.fileTree.appendChild(node);
+        }
+
+        updateFileCount();
+
+        $("#explorerFooter").textContent =
+            state.allFiles.length + " files indexed";
+
+    } catch (error) {
+        elements.fileTree.innerHTML = "";
+
+        const message = document.createElement("div");
+        message.className = "tree-empty";
+        message.textContent =
+            "Could not read project: " + explainError(error);
+
+        elements.fileTree.appendChild(message);
+
+        logOutput(explainError(error), "error");
+    }
+}
+
+async function readDirectory(path) {
+    const result = await bridgeCall(
+        ["readDirectory", "getDirectory"],
+        path
+    );
+
+    return normalizeEntries(result);
+}
+
+function sortEntries(entries) {
+    return [...entries].sort((a, b) => {
+        const aDir = isDirectoryEntry(a);
+        const bDir = isDirectoryEntry(b);
+
+        if (aDir !== bDir) return aDir ? -1 : 1;
+
+        return getEntryName(a).localeCompare(
+            getEntryName(b)
+        );
+    });
+}
+
+function buildTreeNode(entry, parentPath, depth) {
+    const isDir = isDirectoryEntry(entry);
+    const path = getEntryPath(entry, parentPath);
+    const name = getEntryName(entry);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "tree-node";
+
+    const row = document.createElement("div");
+    row.className = "tree-row";
+    row.title = path;
+
+    const arrow = document.createElement("span");
+    arrow.className = "tree-arrow";
+    arrow.textContent = isDir ? "›" : "";
+
+    const symbol = document.createElement("span");
+    symbol.className = "tree-symbol";
+    symbol.textContent = isDir ? "▱" : fileSymbol(path);
+
+    const label = document.createElement("span");
+    label.className = "tree-label";
+    label.textContent = name;
+
+    row.append(arrow, symbol, label);
+
+    const children = document.createElement("div");
+    children.className = "tree-children";
+    children.hidden = true;
+
+    if (isDir) {
+        row.addEventListener("click", async () => {
+            const isOpen = !children.hidden;
+
+            if (isOpen) {
+                children.hidden = true;
+                arrow.classList.remove("expanded");
+                return;
+            }
+
+            if (!children.dataset.loaded) {
+                try {
+                    const entries = sortEntries(
+                        await readDirectory(path)
+                    );
+
+                    entries.forEach(child => {
+                        children.appendChild(
+                            buildTreeNode(child, path, depth + 1)
+                        );
+                    });
+
+                    children.dataset.loaded = "true";
+
+                } catch (error) {
+                    notify(
+                        "Could not read folder: " +
+                        explainError(error),
+                        "error"
+                    );
+                }
+            }
+
+            children.hidden = false;
+            arrow.classList.add("expanded");
+        });
+
+    } else {
+        state.allFiles.push({
+            path,
+            name,
+            relativePath: getRelativePath(path)
+        });
+
+        row.addEventListener("click", () => {
+            $$(".tree-row.selected").forEach(item => {
+                item.classList.remove("selected");
+            });
+
+            row.classList.add("selected");
+            state.treeSelection = path;
+
+            openProjectFile(path);
+        });
+    }
+
+    row.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+
+        state.treeSelection = path;
+
+        showFileContextMenu(
+            path,
+            isDir
+        );
+    });
+
+    wrapper.append(row);
+
+    if (isDir) {
+        wrapper.append(children);
+    }
+
+    return wrapper;
+}
+
+function updateFileCount() {
+    $("#fileCount").textContent =
+        String(state.allFiles.length);
+}
+
+/* =========================================================
+   FILE AND FOLDER CREATION
+   ========================================================= */
+
+async function createNewFile() {
+    if (!state.root) {
+        notify("Open a project first.", "warning");
+        return;
+    }
+
+    const name = prompt("Enter the new file name:");
+
+    if (!name) return;
+
+    if (name.includes("/") || name.includes("\\")) {
+        notify("Enter a file name, not a folder path.", "error");
+        return;
+    }
+
+    const directory = state.treeSelection &&
+        !state.treeSelection.match(/\.[^\\/]+$/)
+            ? state.treeSelection
+            : state.root;
+
+    const path = joinPath(directory, name);
+
+    try {
+        await bridgeCall(
+            ["createFile"],
+            {
+                path,
+                content: ""
+            }
+        );
+
+        await refreshFileTree();
+        await openProjectFile(path);
+
+        notify("File created: " + name);
+
+    } catch (error) {
+        notify(
+            "Could not create file: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+async function createNewFolder() {
+    if (!state.root) {
+        notify("Open a project first.", "warning");
+        return;
+    }
+
+    const name = prompt("Enter the new folder name:");
+
+    if (!name) return;
+
+    if (name.includes("/") || name.includes("\\")) {
+        notify("Enter a folder name, not a path.", "error");
+        return;
+    }
+
+    const directory = state.treeSelection || state.root;
+    const path = joinPath(directory, name);
+
+    try {
+        await bridgeCall(
+            ["createFolder"],
+            { path }
+        );
+
+        await refreshFileTree();
+
+        notify("Folder created: " + name);
+
+    } catch (error) {
+        notify(
+            "Could not create folder: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+/* =========================================================
+   FILE CONTEXT MENU
+   ========================================================= */
+
+function showFileContextMenu(path, isDirectory) {
+    const choices = isDirectory
+        ? ["New File Here", "New Folder Here", "Copy Path", "Refresh"]
+        : ["Open File", "Rename", "Delete", "Copy Path"];
+
+    const choice = prompt(
+        "File Actions:\n\n" +
+        choices.map((item, i) => (i + 1) + ". " + item).join("\n") +
+        "\n\nEnter an action number:"
+    );
+
+    if (!choice) return;
+
+    const index = Number(choice) - 1;
+    const action = choices[index];
+
+    if (!action) return;
+
+    if (action === "Copy Path") {
+        copyText(path);
+    }
+
+    if (action === "Open File") {
+        openProjectFile(path);
+    }
+
+    if (action === "Rename") {
+        renamePath(path);
+    }
+
+    if (action === "Delete") {
+        deletePath(path);
+    }
+
+    if (action === "Refresh") {
+        refreshFileTree();
+    }
+
+    if (action === "New File Here") {
+        createNewFile();
+    }
+
+    if (action === "New Folder Here") {
+        createNewFolder();
+    }
+}
+
+async function renamePath(oldPath) {
+    const oldName = basename(oldPath);
+
+    const newName = prompt(
+        "Enter the new name:",
+        oldName
+    );
+
+    if (!newName || newName === oldName) return;
+
+    if (newName.includes("/") || newName.includes("\\")) {
+        notify("Enter a name, not a path.", "error");
+        return;
+    }
+
+    const parent = oldPath.replace(/[\\/][^\\/]*$/, "");
+    const newPath = joinPath(parent, newName);
+
+    try {
+        await bridgeCall(
+            ["renameFile", "renamePath"],
+            {
+                oldPath,
+                newPath
+            }
+        );
+
+        const doc = findDocument(oldPath);
+
+        if (doc) {
+            doc.path = newPath;
+            doc.name = newName;
+        }
+
+        await refreshFileTree();
+        renderTabs();
+
+        notify("Renamed to " + newName);
+
+    } catch (error) {
+        notify(
+            "Rename failed: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+async function deletePath(path) {
+    const confirmed = confirm(
+        "Delete " + basename(path) + "?\n\n" +
+        "This operation may permanently remove the file."
+    );
+
+    if (!confirmed) return;
+
+    try {
+        await bridgeCall(
+            ["deleteFile", "deletePath"],
+            { path }
+        );
+
+        const doc = findDocument(path);
+
+        if (doc) {
+            closeDocument(doc.id);
+        }
+
+        await refreshFileTree();
+
+        notify("File deleted.");
+
+    } catch (error) {
+        notify(
+            "Delete failed: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+async function copyText(text) {
+    try {
+        await navigator.clipboard.writeText(String(text));
+        notify("Copied to clipboard.");
+    } catch {
+        notify("Clipboard access is unavailable.", "warning");
+    }
+}
+
+/* =========================================================
+   PROJECT SEARCH
+   ========================================================= */
+
+function scheduleProjectSearch() {
+    clearTimeout(state.searchTimer);
+
+    state.searchTimer = setTimeout(
+        runProjectSearch,
+        350
+    );
+}
+
+async function runProjectSearch() {
+    const query = $("#projectSearchInput").value;
+
+    if (!query.trim()) {
+        $("#searchResults").innerHTML =
+            '<div class="tree-empty">Enter a search term.</div>';
+
+        $("#searchResultCount").textContent = "0";
+        return;
+    }
+
+    if (!state.root) {
+        $("#searchResults").innerHTML =
+            '<div class="tree-empty">Open a project first.</div>';
+        return;
+    }
+
+    const caseSensitive = $("#caseSensitive").checked;
+    const wholeWord = $("#wholeWord").checked;
+
+    const excludes = $("#projectSearchExclude")
+        .value
+        .split(",")
+        .map(item => item.trim())
+        .filter(Boolean);
+
+    $("#searchResults").innerHTML =
+        '<div class="tree-empty">Searching project files...</div>';
+
+    const results = [];
+    const files = [...state.allFiles].slice(0, 500);
+
+    for (const file of files) {
+        if (excludes.some(exclude =>
+            file.relativePath.includes(exclude)
+        )) {
+            continue;
+        }
+
+        try {
+            const response = await bridgeCall(
+                ["readProjectFile", "readFile"],
+                file.path
+            );
+
+            const content = normalizeFileContent(response);
+            const lines = content.split(/\r?\n/);
+
+            for (let i = 0; i < lines.length; i++) {
+                let source = lines[i];
+                let target = query;
+
+                if (!caseSensitive) {
+                    source = source.toLowerCase();
+                    target = target.toLowerCase();
+                }
+
+                let match = source.includes(target);
+
+                if (wholeWord && match) {
+                    const escaped = target.replace(
+                        /[.*+?^${}()|[\]\\]/g,
+                        "\\$&"
+                    );
+
+                    const flags = caseSensitive ? "" : "i";
+
+                    match = new RegExp(
+                        "\\b" + escaped + "\\b",
+                        flags
+                    ).test(lines[i]);
+                }
+
+                if (match) {
+                    results.push({
+                        path: file.path,
+                        relativePath: file.relativePath,
+                        line: i + 1,
+                        text: lines[i].trim()
+                    });
+
+                    if (results.length >= 300) break;
+                }
+            }
+
+        } catch {
+            // Binary or inaccessible files are skipped.
+        }
+
+        if (results.length >= 300) break;
+    }
+
+    state.searchResults = results;
+    renderSearchResults();
+}
+
+function renderSearchResults() {
+    const container = $("#searchResults");
+    container.innerHTML = "";
+
+    $("#searchResultCount").textContent =
+        String(state.searchResults.length);
+
+    if (!state.searchResults.length) {
+        container.innerHTML =
+            '<div class="tree-empty">No matches found.</div>';
+        return;
+    }
+
+    state.searchResults.forEach(result => {
+        const item = document.createElement("div");
+        item.className = "search-result";
+
+        const path = document.createElement("div");
+        path.className = "search-result-path";
+        path.textContent =
+            result.relativePath + ":" + result.line;
+
+        const line = document.createElement("div");
+        line.className = "search-result-line";
+        line.textContent = result.text;
+
+        item.append(path, line);
+
+        item.addEventListener("click", async () => {
+            await openProjectFile(result.path);
+
+            if (
+                state.editor &&
+                state.activeDocument &&
+                state.editor.getModel()
+            ) {
+                state.editor.revealLineInCenter(result.line);
+
+                state.editor.setPosition({
+                    lineNumber: result.line,
+                    column: 1
+                });
+
+                state.editor.focus();
+            }
+        });
+
+        container.appendChild(item);
+    });
+}
+
+/* =========================================================
+   GIT STATUS
+   ========================================================= */
+
+async function refreshGitStatus() {
+    if (!state.root) {
+        notify("Open a project first.", "warning");
+        return;
+    }
+
+    $("#gitSidebarContent").textContent = "Checking Git status...";
+    $("#gitBottomContent").textContent = "Checking Git status...";
+
+    try {
+        const result = await bridgeCall(
+            ["gitStatus", "getGitStatus"],
+            { path: state.root }
+        );
+
+        const text = typeof result === "string"
+            ? result
+            : JSON.stringify(result, null, 2);
+
+        renderGitStatus(result, text);
+
+        logOutput("Git status updated.", "success");
+
+    } catch (error) {
+        const message = explainError(error);
+
+        $("#gitSidebarContent").textContent = message;
+        $("#gitBottomContent").textContent = message;
+
+        notify(
+            "Git status unavailable: " + message,
+            "warning"
+        );
+    }
+}
+
+function renderGitStatus(result, fallbackText) {
+    const sidebar = $("#gitSidebarContent");
+    const bottom = $("#gitBottomContent");
+
+    sidebar.innerHTML = "";
+    bottom.innerHTML = "";
+
+    if (Array.isArray(result)) {
+        if (!result.length) {
+            sidebar.textContent = "Working tree is clean.";
+            bottom.textContent = "No changed files.";
+            $("#statusBranch").textContent = "◇ Clean";
+            return;
+        }
+
+        result.forEach(item => {
+            const name = item.path || item.name || "File";
+            const status = item.status || item.code || "Modified";
+
+            const entry = document.createElement("div");
+            entry.className = "git-entry";
+
+            const entryName = document.createElement("span");
+            entryName.className = "git-entry-name";
+            entryName.textContent = name;
+
+            const entryStatus = document.createElement("span");
+            entryStatus.className = "git-entry-status";
+            entryStatus.textContent = status;
+
+            entry.append(entryName, entryStatus);
+
+            sidebar.appendChild(entry);
+            bottom.appendChild(entry.cloneNode(true));
+        });
+
+        $("#statusBranch").textContent =
+            "◇ " + result.length + " Changes";
+
+    } else {
+        const pre = document.createElement("pre");
+
+        pre.style.whiteSpace = "pre-wrap";
+        pre.style.fontFamily = "var(--code-font)";
+        pre.style.fontSize = "11px";
+        pre.textContent = fallbackText;
+
+        sidebar.appendChild(pre);
+        bottom.appendChild(pre.cloneNode(true));
+    }
+}
+
+/* =========================================================
+   OUTLINE
+   ========================================================= */
+
+function updateOutline() {
+    const container = $("#outlineContent");
+
+    if (!state.activeDocument) {
+        container.textContent =
+            "Open a document to view its outline.";
+        return;
+    }
+
+    const content = state.activeDocument.content;
+    const language = languageFromPath(
+        state.activeDocument.path || state.activeDocument.name
+    );
+
+    const patterns = [];
+
+    if (["javascript", "typescript"].includes(language)) {
+        patterns.push(
+            /^\s*(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)/gm,
+            /^\s*(?:export\s+)?class\s+([A-Za-z_$][\w$]*)/gm
+        );
+    }
+
+    if (language === "python") {
+        patterns.push(
+            /^\s*def\s+([A-Za-z_]\w*)/gm,
+            /^\s*class\s+([A-Za-z_]\w*)/gm
+        );
+    }
+
+    if (language === "markdown") {
+        patterns.push(
+            /^\s{0,3}(#{1,6})\s+(.+)$/gm
+        );
+    }
+
+    const items = [];
+
+    patterns.forEach(pattern => {
+        let match;
+
+        while ((match = pattern.exec(content)) !== null) {
+            items.push({
+                name: match[2] || match[1],
+                index: match.index
+            });
+        }
+    });
+
+    items.sort((a, b) => a.index - b.index);
+
+    container.innerHTML = "";
+
+    if (!items.length) {
+        container.textContent =
+            "No outline symbols were found in this file.";
+        return;
+    }
+
+    items.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "tree-row";
+        row.textContent = "◇ " + item.name;
+
+        row.addEventListener("click", () => {
+            if (!state.editor) return;
+
+            const before = content.slice(0, item.index);
+            const line = before.split("\n").length;
+
+            state.editor.revealLineInCenter(line);
+            state.editor.setPosition({
+                lineNumber: line,
+                column: 1
+            });
+        });
+
+        container.appendChild(row);
+    });
+}
+
+/* =========================================================
+   BREADCRUMBS AND STATUS
+   ========================================================= */
+
+function updateBreadcrumbs() {
+    const container = $("#breadcrumbs");
+    container.innerHTML = "";
+
+    const doc = state.activeDocument;
+
+    if (!doc) {
+        container.textContent = "Sharp Code  ›  Welcome";
+        return;
+    }
+
+    const label = doc.path
+        ? getRelativePath(doc.path)
+        : doc.name;
+
+    const parts = label.split(/[\\/]/);
+
+    parts.forEach((part, index) => {
+        const item = document.createElement("span");
+
+        item.textContent = part;
+
+        if (index === parts.length - 1) {
+            item.className = "breadcrumb-current";
+        }
+
+        container.appendChild(item);
+
+        if (index < parts.length - 1) {
+            const separator = document.createElement("span");
+            separator.textContent = "›";
+            container.appendChild(separator);
+        }
+    });
+}
+
+function updateStatus() {
+    const doc = state.activeDocument;
+
+    if (!doc) {
+        $("#statusLanguage").textContent = "Plain Text";
+        $("#statusCursor").textContent = "Ln 1, Col 1";
+        $("#statusProblems").textContent = "0 Problems";
+        return;
+    }
+
+    const language = languageFromPath(
+        doc.path || doc.name
+    );
+
+    $("#statusLanguage").textContent =
+        language.charAt(0).toUpperCase() + language.slice(1);
+
+    $("#statusProblems").textContent =
+        "0 Problems";
+
+    if (state.editor && state.monacoReady) {
+        const position = state.editor.getPosition();
+
+        if (position) {
+            $("#statusCursor").textContent =
+                "Ln " + position.lineNumber +
+                ", Col " + position.column;
+        }
+    }
+}
+
+/* =========================================================
+   COMMAND PALETTE
+   ========================================================= */
+
+const commands = [
+    {
+        label: "File: New File",
+        description: "Create an untitled file",
+        run: newUntitledDocument
+    },
+    {
+        label: "File: Open Project",
+        description: "Open a project folder",
+        run: openProject
+    },
+    {
+        label: "File: Open File",
+        description: "Open a file using the system dialog",
+        run: openFileFromDialog
+    },
+    {
+        label: "File: Save",
+        description: "Save current document",
+        run: saveCurrentDocument
+    },
+    {
+        label: "File: Save All",
+        description: "Save all modified documents",
+        run: saveAllDocuments
+    },
+    {
+        label: "Explorer: New File",
+        description: "Create a file in the project",
+        run: createNewFile
+    },
+    {
+        label: "Explorer: New Folder",
+        description: "Create a folder in the project",
+        run: createNewFolder
+    },
+    {
+        label: "Explorer: Refresh",
+        description: "Reload project files",
+        run: refreshFileTree
+    },
+    {
+        label: "View: Toggle Sidebar",
+        description: "Show or hide the explorer",
+        run: toggleSidebar
+    },
+    {
+        label: "View: Toggle Bottom Panel",
+        description: "Show or hide the bottom panel",
+        run: toggleBottomPanel
+    },
+    {
+        label: "View: Assistant",
+        description: "Open the assistant panel",
+        run: toggleAssistant
+    },
+    {
+        label: "View: Problems",
+        description: "Open Problems",
+        run: () => showBottomView("problems")
+    },
+    {
+        label: "View: Output",
+        description: "Open Output",
+        run: () => showBottomView("output")
+    },
+    {
+        label: "View: Terminal",
+        description: "Open Terminal panel",
+        run: () => showBottomView("terminal")
+    },
+    {
+        label: "Source Control: Refresh",
+        description: "Refresh Git status",
+        run: refreshGitStatus
+    },
+    {
+        label: "Preferences: Settings",
+        description: "Change editor settings",
+        run: openSettings
+    },
+    {
+        label: "Editor: Find",
+        description: "Find text in the current file",
+        run: () => state.editor?.getAction("actions.find")?.run()
+    },
+    {
+        label: "Editor: Replace",
+        description: "Replace text in the current file",
+        run: () => state.editor?.getAction("editor.action.startFindReplaceAction")?.run()
+    },
+    {
+        label: "Editor: Format Document",
+        description: "Format the active document if a formatter is available",
+        run: () => state.editor?.getAction("editor.action.formatDocument")?.run()
+    },
+    {
+        label: "Editor: Select All",
+        description: "Select all editor content",
+        run: () => state.editor?.getAction("editor.action.selectAll")?.run()
+    },
+    {
+        label: "Editor: Toggle Comment",
+        description: "Comment or uncomment selected lines",
+        run: () => state.editor?.getAction("editor.action.commentLine")?.run()
+    },
+    {
+        label: "Git: Show Status",
+        description: "Open Git status",
+        run: () => {
+            showBottomView("git");
+            refreshGitStatus();
+        }
+    },
+    {
+        label: "Help: Keyboard Shortcuts",
+        description: "Display keyboard shortcuts",
+        run: showKeyboardShortcuts
+    }
+];
+
+function openCommandPalette() {
+    elements.commandOverlay.classList.add("visible");
+    elements.commandInput.value = "";
+    state.commandSelection = 0;
+
+    renderCommandList(commands);
+
+    setTimeout(() => elements.commandInput.focus(), 20);
+}
+
+function closeCommandPalette() {
+    elements.commandOverlay.classList.remove("visible");
+}
+
+function renderCommandList(items) {
+    const container = elements.commandList;
+    container.innerHTML = "";
+
+    if (!items.length) {
+        container.textContent = "No matching commands.";
+        return;
+    }
+
+    items.forEach((command, index) => {
+        const button = document.createElement("button");
+        button.className = "dialog-item" +
+            (index === state.commandSelection ? " selected" : "");
+
+        const name = document.createElement("span");
+        name.textContent = command.label;
+
+        const description = document.createElement("span");
+        description.className = "dialog-item-description";
+        description.textContent = command.description;
+
+        button.append(name, description);
+
+        button.addEventListener("click", () => {
+            runCommand(command);
+        });
+
+        container.appendChild(button);
+    });
+}
+
+function filterCommands() {
+    const query = elements.commandInput.value.toLowerCase();
+
+    const matches = commands.filter(command =>
+        command.label.toLowerCase().includes(query) ||
+        command.description.toLowerCase().includes(query)
+    );
+
+    state.filteredCommands = matches;
+    state.commandSelection = 0;
+
+    renderCommandList(matches);
+}
+
+async function runCommand(command) {
+    closeCommandPalette();
+
+    try {
+        await command.run();
+    } catch (error) {
+        notify(
+            "Command failed: " + explainError(error),
+            "error"
+        );
+    }
+}
+
+function showKeyboardShortcuts() {
+    alert(
+        "SHARP CODE KEYBOARD SHORTCUTS\n\n" +
+        "Ctrl + S             Save\n" +
+        "Ctrl + Shift + S     Save All\n" +
+        "Ctrl + P             Quick Open\n" +
+        "Ctrl + Shift + P     Command Palette\n" +
+        "Ctrl + B             Toggle Sidebar\n" +
+        "Ctrl + F             Find\n" +
+        "Ctrl + H             Replace\n" +
+        "Ctrl + W             Close Current Tab\n" +
+        "Ctrl + N             New File\n" +
+        "Ctrl + `             Terminal Panel\n" +
+        "Ctrl + Shift + E     Explorer\n"
+    );
+}
+
+/* =========================================================
+   QUICK OPEN
+   ========================================================= */
+
+function openQuickOpen() {
+    if (!state.root) {
+        notify("Open a project first.", "warning");
+        return;
+    }
+
+    elements.quickOpenOverlay.classList.add("visible");
+    elements.quickOpenInput.value = "";
+
+    state.quickOpenSelection = 0;
+
+    renderQuickOpen(state.allFiles);
+
+    setTimeout(() => elements.quickOpenInput.focus(), 20);
+}
+
+function closeQuickOpen() {
+    elements.quickOpenOverlay.classList.remove("visible");
+}
+
+function renderQuickOpen(files) {
+    const container = elements.quickOpenList;
+    container.innerHTML = "";
+
+    if (!files.length) {
+        container.textContent = "No matching files.";
+        return;
+    }
+
+    files.slice(0, 100).forEach((file, index) => {
+        const item = document.createElement("button");
+
+        item.className = "dialog-item" +
+            (index === state.quickOpenSelection ? " selected" : "");
+
+        const name = document.createElement("span");
+        name.textContent = file.name;
+
+        const path = document.createElement("span");
+        path.className = "dialog-item-description";
+        path.textContent = file.relativePath;
+
+        item.append(name, path);
+
+        item.addEventListener("click", async () => {
+            closeQuickOpen();
+            await openProjectFile(file.path);
+        });
+
+        container.appendChild(item);
+    });
+}
+
+function filterQuickOpen() {
+    const query = elements.quickOpenInput.value.toLowerCase();
+
+    const matches = state.allFiles.filter(file =>
+        file.name.toLowerCase().includes(query) ||
+        file.relativePath.toLowerCase().includes(query)
+    );
+
+    state.filteredFiles = matches;
+    state.quickOpenSelection = 0;
+
+    renderQuickOpen(matches);
+}
+
+/* =========================================================
+   SIDEBAR VIEW MANAGEMENT
+   ========================================================= */
+
+function showSidebarView(view) {
+    state.sidebarView = view;
+
+    const names = {
+        explorer: "Explorer",
+        search: "Search",
+        git: "Source Control",
+        outline: "Outline"
+    };
+
+    $("#sidebarTitle").textContent = names[view] || "Explorer";
+
+    $$(".panel-view").forEach(panel => {
+        panel.hidden = true;
+    });
+
+    const target = $("#" + view + "View");
+
+    if (target) target.hidden = false;
+
+    $$(".activity-button[data-view]").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.view === view
+        );
+    });
+
+    if (view === "git") {
+        refreshGitStatus();
+    }
+
+    if (view === "outline") {
+        updateOutline();
+    }
+}
+
+function toggleSidebar() {
+    state.sidebarVisible = !state.sidebarVisible;
+
+    elements.sidebar.classList.toggle(
+        "hidden",
+        !state.sidebarVisible
+    );
+}
+
+/* =========================================================
+   BOTTOM PANEL MANAGEMENT
+   ========================================================= */
+
+function toggleBottomPanel() {
+    state.bottomVisible = !state.bottomVisible;
+
+    elements.bottomPanel.classList.toggle(
+        "visible",
+        state.bottomVisible
+    );
+
+    if (state.editor) {
+        state.editor.layout();
+    }
+}
+
+function showBottomView(view) {
+    if (!state.bottomVisible) {
+        state.bottomVisible = true;
+        elements.bottomPanel.classList.add("visible");
+    }
+
+    state.bottomView = view;
+
+    $$(".bottom-tab").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.bottom === view
+        );
+    });
+
+    $$(".bottom-view").forEach(panel => {
+        panel.classList.toggle(
+            "active",
+            panel.id === view + "Bottom"
+        );
+    });
+
+    if (state.editor) {
+        state.editor.layout();
+    }
+
+    if (view === "git") {
+        refreshGitStatus();
+    }
+}
+
+/* =========================================================
+   ASSISTANT PANEL
+   ========================================================= */
+
+function toggleAssistant() {
+    state.assistantVisible = !state.assistantVisible;
+
+    elements.rightPanel.classList.toggle(
+        "visible",
+        state.assistantVisible
+    );
+
+    $("#assistantToggle").classList.toggle(
+        "active",
+        state.assistantVisible
+    );
+
+    if (state.editor) {
+        state.editor.layout();
+    }
+}
+
+async function sendAssistantMessage() {
+    const input = $("#assistantInput");
+    const promptText = input.value.trim();
+
+    if (!promptText) return;
+
+    const ask = getBridgeMethod([
+        "askAI",
+        "sendAIMessage",
+        "assistantMessage"
+    ]);
+
+    if (!ask) {
+        $("#assistantStatus").textContent =
+            "No AI provider is connected. Add an AI method to the preload bridge to enable responses.";
+
+        notify(
+            "AI is not connected to Sharp Code yet.",
+            "warning"
+        );
+
+        return;
+    }
+
+    input.disabled = true;
+    $("#assistantSend").disabled = true;
+
+    $("#assistantStatus").textContent =
+        "Sending request...";
+
+    try {
+        syncActiveDocument();
+
+        const result = await ask({
+            prompt: promptText,
+            fileName: state.activeDocument?.name || null,
+            code: state.activeDocument?.content || "",
+            projectPath: state.root
+        });
+
+        $("#assistantResponse").textContent =
+            typeof result === "string"
+                ? result
+                : result?.content || JSON.stringify(result);
+
+        $("#assistantStatus").textContent =
+            "Response received.";
+
+        input.value = "";
+
+    } catch (error) {
+        $("#assistantStatus").textContent =
+            "Assistant request failed: " + explainError(error);
+    } finally {
+        input.disabled = false;
+        $("#assistantSend").disabled = false;
+    }
+}
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+function openSettings() {
+    $("#settingFontSize").value =
+        state.settings.fontSize;
+
+    $("#settingTabSize").value =
+        state.settings.tabSize;
+
+    $("#settingWordWrap").checked =
+        state.settings.wordWrap;
+
+    $("#settingMinimap").checked =
+        state.settings.minimap;
+
+    $("#settingLineNumbers").checked =
+        state.settings.lineNumbers;
+
+    $("#settingAutoSave").checked =
+        state.settings.autoSave;
+
+    elements.settingsOverlay.classList.add("visible");
+}
+
+function closeSettings() {
+    elements.settingsOverlay.classList.remove("visible");
+}
+
+function applySettings() {
+    state.settings.fontSize = Math.max(
+        10,
+        Math.min(28, Number($("#settingFontSize").value) || 14)
+    );
+
+    state.settings.tabSize = Math.max(
+        1,
+        Math.min(8, Number($("#settingTabSize").value) || 4)
+    );
+
+    state.settings.wordWrap =
+        $("#settingWordWrap").checked;
+
+    state.settings.minimap =
+        $("#settingMinimap").checked;
+
+    state.settings.lineNumbers =
+        $("#settingLineNumbers").checked;
+
+    state.settings.autoSave =
+        $("#settingAutoSave").checked;
+
+    if (state.editor) {
+        state.editor.updateOptions({
+            fontSize: state.settings.fontSize,
+            tabSize: state.settings.tabSize,
+            wordWrap: state.settings.wordWrap
+                ? "on"
+                : "off",
+            minimap: {
+                enabled: state.settings.minimap
+            },
+            lineNumbers: state.settings.lineNumbers
+                ? "on"
+                : "off"
+        });
+    }
+
+    closeSettings();
+
+    notify("Editor settings applied.");
+}
+
+/* =========================================================
+   MENU ACTIONS
+   ========================================================= */
+
+function openMenu(name) {
+    const menus = {
+        "file-menu": [
+            "New File",
+            "Open File",
+            "Open Project",
+            "Save",
+            "Save All"
+        ],
+
+        "edit-menu": [
+            "Find",
+            "Replace",
+            "Select All",
+            "Toggle Comment"
+        ],
+
+        "view-menu": [
+            "Toggle Sidebar",
+            "Toggle Bottom Panel",
+            "Assistant",
+            "Settings"
+        ],
+
+        "go-menu": [
+            "Quick Open",
+            "Command Palette"
+        ],
+
+        "run-menu": [
+            "Format Document"
+        ],
+
+        "terminal-menu": [
+            "Show Terminal"
+        ],
+
+        "help-menu": [
+            "Keyboard Shortcuts"
+        ]
+    };
+
+    const options = menus[name];
+
+    if (!options) return;
+
+    const choice = prompt(
+        options.join("\n") +
+        "\n\nEnter an option:"
+    );
+
+    if (!choice) return;
+
+    const selected = options.find(
+        option => option.toLowerCase() === choice.toLowerCase()
+    );
+
+    if (!selected) {
+        notify("Unknown menu option.", "warning");
+        return;
+    }
+
+    const actions = {
+        "New File": newUntitledDocument,
+        "Open File": openFileFromDialog,
+        "Open Project": openProject,
+        "Save": saveCurrentDocument,
+        "Save All": saveAllDocuments,
+
+        "Find": () =>
+            state.editor?.getAction("actions.find")?.run(),
+
+        "Replace": () =>
+            state.editor?.getAction(
+                "editor.action.startFindReplaceAction"
+            )?.run(),
+
+        "Select All": () =>
+            state.editor?.getAction(
+                "editor.action.selectAll"
+            )?.run(),
+
+        "Toggle Comment": () =>
+            state.editor?.getAction(
+                "editor.action.commentLine"
+            )?.run(),
+
+        "Toggle Sidebar": toggleSidebar,
+        "Toggle Bottom Panel": toggleBottomPanel,
+        "Assistant": toggleAssistant,
+        "Settings": openSettings,
+
+        "Quick Open": openQuickOpen,
+        "Command Palette": openCommandPalette,
+
+        "Format Document": () =>
+            state.editor?.getAction(
+                "editor.action.formatDocument"
+            )?.run(),
+
+        "Show Terminal": () => showBottomView("terminal"),
+
+        "Keyboard Shortcuts": showKeyboardShortcuts
+    };
+
+    actions[selected]?.();
+}
+
+/* =========================================================
+   EVENT LISTENERS: TOP BAR
+   ========================================================= */
+
+$("#openProjectButton").addEventListener(
+    "click",
+    openProject
+);
+
+$("#openFolderSmall").addEventListener(
+    "click",
+    openProject
+);
+
+$("#welcomeOpenProject").addEventListener(
+    "click",
+    openProject
+);
+
+$("#welcomeOpenFile").addEventListener(
+    "click",
+    openFileFromDialog
+);
+
+$("#welcomeNewFile").addEventListener(
+    "click",
+    newUntitledDocument
+);
+
+$("#saveButton").addEventListener(
+    "click",
+    saveCurrentDocument
+);
+
+$("#editorSaveButton").addEventListener(
+    "click",
+    saveCurrentDocument
+);
+
+$("#commandPaletteButton").addEventListener(
+    "click",
+    openCommandPalette
+);
+
+/* =========================================================
+   EVENT LISTENERS: EXPLORER
+   ========================================================= */
+
+$("#newFileButton").addEventListener(
+    "click",
+    createNewFile
+);
+
+$("#newFolderButton").addEventListener(
+    "click",
+    createNewFolder
+);
+
+$("#refreshTreeButton").addEventListener(
+    "click",
+    refreshFileTree
+);
+
+$("#refreshGitButton").addEventListener(
+    "click",
+    refreshGitStatus
+);
+
+$("#gitRefreshLarge").addEventListener(
+    "click",
+    refreshGitStatus
+);
+
+/* =========================================================
+   EVENT LISTENERS: ACTIVITY BAR
+   ========================================================= */
+
+$$(".activity-button[data-view]").forEach(button => {
+    button.addEventListener("click", () => {
+        showSidebarView(button.dataset.view);
+    });
+});
+
+$("#assistantToggle").addEventListener(
+    "click",
+    toggleAssistant
+);
+
+$("#settingsButton").addEventListener(
+    "click",
+    openSettings
+);
+
+$("#closeRightPanel").addEventListener(
+    "click",
+    toggleAssistant
+);
+
+/* =========================================================
+   EVENT LISTENERS: BOTTOM PANEL
+   ========================================================= */
+
+$$(".bottom-tab").forEach(button => {
+    button.addEventListener("click", () => {
+        showBottomView(button.dataset.bottom);
+    });
+});
+
+$("#closeBottomPanel").addEventListener(
+    "click",
+    toggleBottomPanel
+);
+
+/* =========================================================
+   EVENT LISTENERS: SEARCH
+   ========================================================= */
+
+$("#projectSearchInput").addEventListener(
+    "input",
+    scheduleProjectSearch
+);
+
+$("#projectSearchExclude").addEventListener(
+    "change",
+    scheduleProjectSearch
+);
+
+$("#caseSensitive").addEventListener(
+    "change",
+    scheduleProjectSearch
+);
+
+$("#wholeWord").addEventListener(
+    "change",
+    scheduleProjectSearch
+);
+
+/* =========================================================
+   EVENT LISTENERS: DIALOGS
+   ========================================================= */
+
+$("#commandInput").addEventListener(
+    "input",
+    filterCommands
+);
+
+$("#quickOpenInput").addEventListener(
+    "input",
+    filterQuickOpen
+);
+
+$("#applySettings").addEventListener(
+    "click",
+    applySettings
+);
+
+$("#assistantSend").addEventListener(
+    "click",
+    sendAssistantMessage
+);
+
+$("#assistantInput").addEventListener(
+    "keydown",
+    (event) => {
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+            event.preventDefault();
+            sendAssistantMessage();
+        }
+    }
+);
+
+$("#closeRightPanel").addEventListener(
+    "click",
+    () => {
+        state.assistantVisible = false;
+        elements.rightPanel.classList.remove("visible");
+        $("#assistantToggle").classList.remove("active");
+    }
+);
+
+/* =========================================================
+   EVENT LISTENERS: ASSISTANT SUGGESTIONS
+   ========================================================= */
+
+$$(".assistant-suggestion").forEach(button => {
+    button.addEventListener("click", () => {
+        $("#assistantInput").value =
+            button.dataset.prompt || "";
+
+        $("#assistantInput").focus();
+    });
+});
+
+/* =========================================================
+   EVENT LISTENERS: MENU BAR
+   ========================================================= */
+
+$$(".menu-button").forEach(button => {
+    button.addEventListener("click", () => {
+        openMenu(button.dataset.command);
+    });
+});
+
+/* =========================================================
+   EVENT LISTENERS: OVERLAYS
+   ========================================================= */
+
+elements.commandOverlay.addEventListener(
+    "mousedown",
+    (event) => {
+        if (event.target === elements.commandOverlay) {
+            closeCommandPalette();
+        }
+    }
+);
+
+elements.quickOpenOverlay.addEventListener(
+    "mousedown",
+    (event) => {
+        if (event.target === elements.quickOpenOverlay) {
+            closeQuickOpen();
+        }
+    }
+);
+
+elements.settingsOverlay.addEventListener(
+    "mousedown",
+    (event) => {
+        if (event.target === elements.settingsOverlay) {
+            closeSettings();
+        }
+    }
+);
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener("keydown", async (event) => {
+    const key = event.key.toLowerCase();
+    const ctrl = event.ctrlKey || event.metaKey;
+
+    if (ctrl && event.shiftKey && key === "p") {
+        event.preventDefault();
+        openCommandPalette();
+        return;
+    }
+
+    if (ctrl && key === "p") {
+        event.preventDefault();
+        openQuickOpen();
+        return;
+    }
+
+    if (ctrl && key === "s" && event.shiftKey) {
+        event.preventDefault();
+        saveAllDocuments();
+        return;
+    }
+
+    if (ctrl && key === "s") {
+        event.preventDefault();
+        saveCurrentDocument();
+        return;
+    }
+
+    if (ctrl && key === "b") {
+        event.preventDefault();
+        toggleSidebar();
+        return;
+    }
+
+    if (ctrl && key === "n") {
+        event.preventDefault();
+        newUntitledDocument();
+        return;
+    }
+
+    if (ctrl && key === "w") {
+        event.preventDefault();
+
+        if (state.activeDocument) {
+            closeDocument(state.activeDocument.id);
+        }
+
+        return;
+    }
+
+    if (ctrl && key === "f") {
+        event.preventDefault();
+
+        if (state.editor) {
+            state.editor.getAction("actions.find")?.run();
+        }
+
+        return;
+    }
+
+    if (ctrl && key === "h") {
+        event.preventDefault();
+
+        if (state.editor) {
+            state.editor.getAction(
+                "editor.action.startFindReplaceAction"
+            )?.run();
+        }
+
+        return;
+    }
+
+    if (ctrl && key === "e" && event.shiftKey) {
+        event.preventDefault();
+        showSidebarView("explorer");
+        return;
+    }
+
+    if (ctrl && key === "`") {
+        event.preventDefault();
+        showBottomView("terminal");
+        return;
+    }
+
+    if (key === "escape") {
+        closeCommandPalette();
+        closeQuickOpen();
+        closeSettings();
+        return;
+    }
+
+    if (
+        elements.commandOverlay.classList.contains("visible")
+    ) {
+        if (key === "arrowdown") {
+            event.preventDefault();
+            state.commandSelection++;
+        }
+
+        if (key === "arrowup") {
+            event.preventDefault();
+            state.commandSelection = Math.max(
+                0,
+                state.commandSelection - 1
+            );
+        }
+
+        if (key === "enter") {
+            event.preventDefault();
+
+            const matches = state.filteredCommands || commands;
+            const command = matches[state.commandSelection];
+
+            if (command) runCommand(command);
+        }
+    }
+
+    if (
+        elements.quickOpenOverlay.classList.contains("visible") &&
+        key === "enter"
+    ) {
+        const files = state.filteredFiles || state.allFiles;
+        const file = files[state.quickOpenSelection];
+
+        if (file) {
+            closeQuickOpen();
+            openProjectFile(file.path);
+        }
+    }
+});
+
+/* =========================================================
+   AUTO SAVE
+   ========================================================= */
+
+setInterval(async () => {
+    if (!state.settings.autoSave) return;
+
+    const dirtyDocuments = state.documents.filter(
+        doc => doc.dirty && doc.path
+    );
+
+    if (!dirtyDocuments.length) return;
+
+    syncActiveDocument();
+
+    for (const doc of dirtyDocuments) {
+        await saveDocument(doc);
+    }
+
+}, 30000);
+
+/* =========================================================
+   RESIZE MANAGEMENT
+   ========================================================= */
+
+window.addEventListener("resize", () => {
+    if (state.editor) {
+        state.editor.layout();
+    }
+});
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+function initializeApplication() {
+    logOutput("Starting Sharp Code...");
+
+    if (!hasBridge()) {
+        notify(
+            "Application bridge not detected.",
+            "warning"
+        );
+
+        logOutput(
+            "window.sharp is unavailable. Project and file operations require the Electron preload bridge.",
+            "warning"
+        );
+    } else {
+        logOutput(
+            "Application bridge detected.",
+            "success"
+        );
+    }
+
+    updateBreadcrumbs();
+    updateStatus();
+
+    initializeMonaco();
+
+    showSidebarView("explorer");
+
+    showBottomView("problems");
+
+    logOutput("Sharp Code interface ready.", "success");
+}
+
+initializeApplication();
+
+</script>
 
 </body>
 </html>
