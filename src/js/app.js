@@ -1,200 +1,281 @@
 
-let editor;
-let currentPath = null;
-let currentName = "untitled.js";
-let isDirty = false;
+(() => {
+  let editor = null;
+  let currentPanel = "editor";
 
-const starterCode = `// Welcome to Sharp Code
-// Your development workspace.
+  const $ = id => document.getElementById(id);
 
-function welcome() {
-  console.log("Welcome to Sharp Code!");
-}
+  const languageMap = {
+    js: "javascript",
+    mjs: "javascript",
+    cjs: "javascript",
+    ts: "typescript",
+    html: "html",
+    css: "css",
+    json: "json",
+    py: "python",
+    cpp: "cpp",
+    c: "c",
+    h: "c",
+    java: "java",
+    rs: "rust",
+    md: "markdown",
+    xml: "xml",
+    yaml: "yaml",
+    yml: "yaml"
+  };
 
-welcome();
-`;
+  window.detectLanguage = name => {
+    const extension = name.split(".").pop().toLowerCase();
+    return languageMap[extension] || "plaintext";
+  };
 
-const languageMap = {
-  js: "javascript",
-  mjs: "javascript",
-  ts: "typescript",
-  html: "html",
-  css: "css",
-  json: "json",
-  py: "python",
-  cpp: "cpp",
-  c: "c",
-  h: "c",
-  java: "java",
-  rs: "rust",
-  md: "markdown",
-  xml: "xml",
-  yaml: "yaml",
-  yml: "yaml"
-};
-
-function detectLanguage(name) {
-  const extension = name.split(".").pop().toLowerCase();
-  return languageMap[extension] || "plaintext";
-}
-
-function updateFileName(name) {
-  currentName = name;
-
-  document.getElementById("fileName").textContent = name;
-  document.getElementById("breadcrumbFile").textContent = name;
-
-  document.getElementById("languageLabel").textContent =
-    detectLanguage(name).toUpperCase();
-}
-
-function setStatus(message) {
-  document.getElementById("status").textContent = message;
-}
-
-function markDirty() {
-  if (!isDirty) {
-    isDirty = true;
-    document.getElementById("modified").textContent = "●";
+  function updateStatus(message) {
+    $("status").textContent = message;
   }
-}
 
-function clearDirty() {
-  isDirty = false;
-  document.getElementById("modified").textContent = "";
-}
+  function updateLanguage(name) {
+    const language = window.detectLanguage(name);
 
-function initializeEditor() {
-  require.config({
-    paths: {
-      vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+    $("languageLabel").textContent = language.toUpperCase();
+    $("languageStatus").textContent = language;
+  }
+
+  function createEditor() {
+    return new Promise((resolve, reject) => {
+      require.config({
+        paths: {
+          vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+        }
+      });
+
+      require(["vs/editor/editor.main"], () => {
+        try {
+          window.SharpThemes.registerAll();
+
+          editor = monaco.editor.create($("editor"), {
+            value: "",
+            language: "javascript",
+            theme: "sharp-emerald",
+            automaticLayout: true,
+            fontSize: 14,
+            fontFamily: "Consolas, monospace",
+            minimap: { enabled: true },
+            scrollBeyondLastLine: false,
+            smoothScrolling: true,
+            padding: { top: 14 },
+            wordWrap: "off",
+            tabSize: 2
+          });
+
+          window.editor = editor;
+
+          editor.onDidChangeCursorPosition(event => {
+            $("cursorPosition").textContent =
+              `Ln ${event.position.lineNumber}, Col ${event.position.column}`;
+          });
+
+          editor.onDidChangeModelContent(() => {
+            const tab = window.SharpTabs.getActive();
+
+            if (tab) {
+              tab.dirty = true;
+              window.SharpTabs.render();
+            }
+          });
+
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      }, reject);
+    });
+  }
+
+  function newFile() {
+    window.SharpTabs.create("untitled.js", "", null);
+    updateStatus("New file created");
+  }
+
+  async function openFile() {
+    try {
+      const file = await window.sharp.openFile();
+
+      if (!file) return;
+
+      window.SharpTabs.open(file);
+      updateStatus("Opened " + file.name);
+    } catch (error) {
+      console.error(error);
+      updateStatus("File opening failed");
     }
-  });
+  }
 
-  require(["vs/editor/editor.main"], function () {
-    monaco.editor.defineTheme("sharp-emerald", {
-      base: "vs-dark",
-      inherit: true,
-      rules: [
-        { token: "comment", foreground: "719B82" },
-        { token: "keyword", foreground: "67DDAA" },
-        { token: "string", foreground: "C2E8A0" }
-      ],
-      colors: {
-        "editor.background": "#071711",
-        "editor.foreground": "#D9EEE1",
-        "editorLineNumber.foreground": "#456B54",
-        "editorLineNumber.activeForeground": "#72DDAA",
-        "editorCursor.foreground": "#70E5AE",
-        "editor.selectionBackground": "#205D42",
-        "editor.lineHighlightBackground": "#10291D"
+  async function saveFile() {
+    const tab = window.SharpTabs.getActive();
+
+    if (!tab) return;
+
+    try {
+      const result = await window.sharp.saveFile({
+        path: tab.path,
+        name: tab.name,
+        content: editor.getValue()
+      });
+
+      if (!result) return;
+
+      tab.path = result.path;
+      tab.name = result.name;
+      tab.dirty = false;
+
+      editor.getModel().updateOptions({
+        tabSize: 2
+      });
+
+      updateLanguage(tab.name);
+      window.SharpTabs.render();
+      window.Explorer.render();
+
+      updateStatus("Saved " + result.name);
+    } catch (error) {
+      console.error(error);
+      updateStatus("Saving failed");
+    }
+  }
+
+  async function openProject() {
+    try {
+      const project = await window.sharp.openProject();
+
+      if (!project) return;
+
+      window.ProjectManager.setProject(project);
+      window.Explorer.setRoot(project.path);
+      window.Explorer.render();
+
+      $("projectTitle").textContent = project.name.toUpperCase();
+
+      updateStatus("Project opened: " + project.name);
+    } catch (error) {
+      console.error(error);
+      updateStatus("Could not open project");
+    }
+  }
+
+  function switchPanel(panel) {
+    currentPanel = panel;
+
+    document.querySelectorAll(".tool").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.panel === panel
+      );
+    });
+
+    if (panel !== "editor") {
+      updateStatus(panel.toUpperCase() + " module is not available yet");
+    } else {
+      updateStatus("Editor ready");
+      editor.focus();
+    }
+  }
+
+  function initializeEvents() {
+    $("newFile").addEventListener("click", newFile);
+    $("openFile").addEventListener("click", openFile);
+    $("saveFile").addEventListener("click", saveFile);
+    $("openProject").addEventListener("click", openProject);
+
+    $("clearConsole").addEventListener(
+      "click",
+      window.SharpConsole.clear
+    );
+
+    $("commandButton").addEventListener(
+      "click",
+      window.SharpCommands.open
+    );
+
+    document.querySelectorAll(".tool").forEach(button => {
+      button.addEventListener("click", () => {
+        switchPanel(button.dataset.panel);
+      });
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "F1") {
+        event.preventDefault();
+        window.SharpCommands.open();
+      }
+
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "n"
+      ) {
+        event.preventDefault();
+        newFile();
       }
     });
 
-    editor = monaco.editor.create(
-      document.getElementById("editor"),
-      {
-        value: starterCode,
-        language: "javascript",
-        theme: "sharp-emerald",
-        automaticLayout: true,
-        fontSize: 14,
-        fontFamily: "Consolas, monospace",
-        minimap: { enabled: true },
-        roundedSelection: true,
-        scrollBeyondLastLine: false,
-        padding: { top: 16 },
-        cursorBlinking: "smooth"
-      }
-    );
-
-    editor.onDidChangeModelContent(markDirty);
-
-    editor.onDidChangeCursorPosition(event => {
-      document.getElementById("cursorPosition").textContent =
-        `Ln ${event.position.lineNumber}, Col ${event.position.column}`;
+    $("fontSize").addEventListener("change", event => {
+      window.SharpSettings.update("fontSize", Number(event.target.value));
     });
 
-    editor.addCommand(
-      monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
-      saveFile
-    );
-
-    editor.addCommand(
-      monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO,
-      openFile
-    );
-
-    setStatus("Editor ready");
-  });
-}
-
-function newFile() {
-  editor.setValue("");
-  currentPath = null;
-  updateFileName("untitled.js");
-  clearDirty();
-  setStatus("New document created");
-}
-
-async function openFile() {
-  try {
-    const file = await window.sharp.openFile();
-
-    if (!file) return;
-
-    editor.setValue(file.content);
-    currentPath = file.path;
-
-    updateFileName(file.name);
-    monaco.editor.setModelLanguage(
-      editor.getModel(),
-      detectLanguage(file.name)
-    );
-
-    clearDirty();
-    setStatus("Opened " + file.name);
-  } catch (error) {
-    setStatus("Could not open file");
-    console.error(error);
-  }
-}
-
-async function saveFile() {
-  try {
-    const result = await window.sharp.saveFile({
-      path: currentPath,
-      content: editor.getValue()
+    $("themeSelect").addEventListener("change", event => {
+      window.SharpThemes.apply(event.target.value);
     });
 
-    if (!result) return;
+    $("wordWrap").addEventListener("change", event => {
+      window.SharpSettings.update("wordWrap", event.target.value);
+    });
 
-    currentPath = result.path;
-    updateFileName(result.name);
+    $("closeSettings").addEventListener("click", () => {
+      $("settingsModal").hidden = true;
+    });
 
-    monaco.editor.setModelLanguage(
-      editor.getModel(),
-      detectLanguage(result.name)
-    );
-
-    clearDirty();
-    setStatus("Saved successfully");
-  } catch (error) {
-    setStatus("Could not save file");
-    console.error(error);
+    $("resetSettings").addEventListener("click", () => {
+      window.SharpSettings.reset();
+      $("fontSize").value = 14;
+      $("themeSelect").value = "emerald";
+      $("wordWrap").value = "off";
+    });
   }
-}
 
-document.getElementById("newFile").addEventListener(
-  "click", newFile
-);
+  async function initialize() {
+    try {
+      await createEditor();
 
-document.getElementById("openFile").addEventListener(
-  "click", openFile
-);
+      window.SharpTabs.initialize(editor);
+      window.Explorer.initialize();
+      window.SharpSettings.initialize(editor);
 
-document.getElementById("saveFile").addEventListener(
-  "click", saveFile
-);
+      initializeEvents();
 
-initializeEditor();
+      newFile();
+
+      window.SharpConsole.log(
+        "Sharp Code 0.2.0 initialized",
+        "success"
+      );
+
+      window.SharpConsole.log("Monaco editor loaded");
+
+      updateStatus("Ready");
+    } catch (error) {
+      console.error(error);
+      updateStatus("Initialization failed");
+    }
+  }
+
+  window.SharpApp = {
+    getEditor: () => editor,
+    getPanel: () => currentPanel,
+    newFile,
+    openFile,
+    saveFile,
+    openProject
+  };
+
+  initialize();
+})();
